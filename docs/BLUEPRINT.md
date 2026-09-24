@@ -27,7 +27,15 @@ https://claude.ai/artifact/WH37nB7EBhKBQ4Q3Z8BiN9).
 | API key visible in static page | Accepted for personal use; entered in Settings | `src/storage.ts` |
 | Done criteria | TODO: 3–5 real test trips with expected results | below |
 
-## Test trips (fill in)
-- [ ] e.g. Home → school at 18:00 must avoid the N1 Garsfontein off-ramp
-- [ ]
-- [ ]
+## Test trips (proposed from public landmarks; adjust to your own trips)
+- [ ] Centurion Mall to Menlyn Maine, 20:30: must not exit the N1 at Garsfontein Rd or Atterbury Rd
+- [ ] Union Buildings to Centurion Mall, 18:00: must avoid Fountains Circle and the N14 Jean Ave off-ramp
+- [ ] Union Buildings to Wonderboom Airport, 21:00: must avoid Paul Kruger St through Wonderboompoort
+- [ ] Hatfield Gautrain to Woodlands Boulevard, 19:30: must avoid the N1 Garsfontein off-ramp and Garsfontein Rd/Delfi Ave
+
+## Known design question: off-ramp pins also block the freeway
+An avoid zone blocks every road inside it. A pin on an interchange therefore
+also blocks the freeway passing through it, not just the off-ramp. Test trips
+will show whether this makes N1/N4 trips impractical. Possible fixes: move
+off-ramp pins onto the local road at the ramp end and use a smaller radius
+for them.
