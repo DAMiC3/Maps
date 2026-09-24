@@ -23,11 +23,18 @@ export const config = {
   /** Google Maps URLs accept a limited number of waypoints; keep it small. */
   maxViaPoints: 8,
 
+  /** Only zones within this distance (m) of the normal route are sent to ORS. */
+  corridorMeters: 5000,
+
   ors: {
-    // The blueprint mentions a newer address (api.heigit.org). Verify which is
-    // current before relying on it; both are configurable here.
-    baseUrl: "https://api.openrouteservice.org",
+    // api.openrouteservice.org was deprecated on 2026-04-28 (reduced quota).
+    // No trailing slashes: they cause 405 errors on the new host.
+    routingBaseUrl: "https://api.heigit.org/openrouteservice",
+    geocodeBaseUrl: "https://api.heigit.org/pelias/v1",
     profile: "driving-car",
+    /** Published avoid_polygons limits (openrouteservice.org/restrictions). */
+    maxAvoidAreaKm2: 200,
+    maxAvoidExtentKm: 20,
     /** Bias address search towards Pretoria. */
     focus: { lat: -25.7479, lng: 28.2293 },
     country: "ZA",

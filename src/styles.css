@@ -66,6 +66,8 @@ button:disabled { opacity: 0.6; cursor: wait; }
 :focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
 .results { list-style: none; margin: 4px 0 0; padding: 0; }
 .results li button { width: 100%; text-align: left; border-radius: 0; border-width: 0 0 1px; }
+.warnings { margin: 0 0 12px; padding-left: 1.2em; color: var(--danger); }
+.warnings:empty { display: none; }
 .muted { color: var(--muted); }
 .small { font-size: 0.875rem; }
 .status { min-height: 1.4em; margin: 4px 0; }

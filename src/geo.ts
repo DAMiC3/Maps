@@ -37,6 +37,40 @@ export function distanceToSegment(p: LatLng, a: LatLng, b: LatLng): number {
   return Math.hypot(ax + t * dx, ay + t * dy);
 }
 
+/** Ray-casting point-in-polygon test. */
+export function pointInRing(p: LatLng, ring: LatLng[]): boolean {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const a = ring[i], b = ring[j];
+    if (a.lat > p.lat !== b.lat > p.lat &&
+        p.lng < ((b.lng - a.lng) * (p.lat - a.lat)) / (b.lat - a.lat) + a.lng) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+/** Approximate ring area in km² (shoelace on a local flat projection). */
+export function ringAreaKm2(ring: LatLng[]): number {
+  const lat0 = rad(ring[0].lat);
+  const xy = ring.map((p) => [p.lng * 111.32 * Math.cos(lat0), p.lat * 110.54]);
+  let sum = 0;
+  for (let i = 0; i < xy.length; i++) {
+    const [x1, y1] = xy[i], [x2, y2] = xy[(i + 1) % xy.length];
+    sum += x1 * y2 - x2 * y1;
+  }
+  return Math.abs(sum) / 2;
+}
+
+/** Larger of the ring's bounding-box width and height, in km. */
+export function ringExtentKm(ring: LatLng[]): number {
+  const lats = ring.map((p) => p.lat), lngs = ring.map((p) => p.lng);
+  const midLat = (Math.min(...lats) + Math.max(...lats)) / 2;
+  const w = distanceMeters({ lat: midLat, lng: Math.min(...lngs) }, { lat: midLat, lng: Math.max(...lngs) });
+  const h = distanceMeters({ lat: Math.min(...lats), lng: 0 }, { lat: Math.max(...lats), lng: 0 });
+  return Math.max(w, h) / 1000;
+}
+
 export function distanceToPolyline(p: LatLng, line: LatLng[]): number {
   if (line.length === 1) return distanceMeters(p, line[0]);
   let best = Infinity;

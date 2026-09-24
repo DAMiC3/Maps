@@ -5,7 +5,7 @@ import { config } from "./config";
 import { parseKml } from "./kml";
 import { geocode, route, type Place } from "./ors";
 import { googleMapsUrl, pickViaPoints } from "./handoff";
-import { activeHotspots, hotspotRing } from "./zones";
+import { activeHotspots, hotspotRing, selectZonesForTrip, type SkipReason } from "./zones";
 import { notesToKml, store } from "./storage";
 import type { Hotspot, LatLng, Route } from "./types";
 
@@ -169,15 +169,33 @@ function requireKey(): string {
 }
 
 // ---- routing ----
-async function findSafeRoute(origin: LatLng, dest: LatLng) {
-  const key = requireKey();
-  const now = new Date();
-  const active = activeHotspots(hotspots, now);
-  const hard = active.filter((h) => h.mode === "avoid");
-  drawZones(active);
+/** Departure time from the "Leave at" field (today), or now if empty. */
+function departureTime(): Date {
+  const value = $<HTMLInputElement>("leaveAt").value;
+  const when = new Date();
+  if (value) {
+    const [h, m] = value.split(":").map(Number);
+    when.setHours(h, m, 0, 0);
+  }
+  return when;
+}
 
+const SKIP_TEXT: Record<SkipReason, string> = {
+  "contains-endpoint": "your start or destination is inside it",
+  "too-large": "it is larger than the routing service allows",
+  "over-total-area": "the total avoid area is over the routing service limit",
+};
+
+async function findSafeRoute(origin: LatLng, dest: LatLng, when: Date) {
+  const key = requireKey();
   setStatus("Finding routes…");
   const normal = await route(origin, dest, [], key);
+
+  const { zones: active, skipped } = selectZonesForTrip(
+    activeHotspots(hotspots, when), origin, dest, normal.coords,
+  );
+  const hard = active.filter((h) => h.mode === "avoid");
+  drawZones(active);
 
   let safe: Route;
   let droppedPrefer = false;
@@ -203,6 +221,13 @@ async function findSafeRoute(origin: LatLng, dest: LatLng) {
     `(${extra ? `+${extra} min to avoid ${active.length} active zones` : "no detour needed"}). ` +
     `${via.length} via-point${via.length === 1 ? "" : "s"}.` +
     (droppedPrefer ? " Large 'prefer to avoid' areas were skipped because the detour was too long." : "");
+  $("warnings").replaceChildren(
+    ...skipped.map((s) =>
+      Object.assign(document.createElement("li"), {
+        textContent: `Not avoided: ${s.hotspot.name}, because ${SKIP_TEXT[s.reason]}.`,
+      }),
+    ),
+  );
   $<HTMLAnchorElement>("openGoogle").href = googleMapsUrl(origin, dest, via);
   $("result").hidden = false;
   setStatus("");
@@ -214,7 +239,7 @@ async function run(useLiveLocation: boolean) {
   try {
     if (!to) throw new Error("Pick a destination from the search results.");
     const origin = !useLiveLocation && from ? from.at : await currentPosition();
-    await findSafeRoute(origin, to.at);
+    await findSafeRoute(origin, to.at, useLiveLocation ? new Date() : departureTime());
   } catch (e) {
     setStatus((e as Error).message, true);
   } finally {
@@ -241,3 +266,8 @@ $("noteBtn").onclick = async () => {
 };
 
 loadHotspots(store.getKml());
+
+// Offline shell + home-screen install. Skipped in dev so Vite reloads aren't cached.
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}

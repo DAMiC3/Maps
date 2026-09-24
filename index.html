@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#1E2A32" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
 </head>
 <body>
@@ -45,7 +45,11 @@
       <input id="to" placeholder="Search a destination" autocomplete="off" required />
       <ul id="toResults" class="results"></ul>
     </div>
-    <button type="submit" id="goBtn" class="primary">Find safe route</button>
+    <div class="field">
+      <label for="leaveAt">Leave at <span class="muted small">(empty = now; sets after-dark zones)</span></label>
+      <input id="leaveAt" type="time" />
+    </div>
+    <button type="submit" id="goBtn" class="primary">Find route</button>
   </form>
 
   <p id="status" class="status" role="status" aria-live="polite"></p>
@@ -54,6 +58,7 @@
 
   <section id="result" class="panel" hidden>
     <p id="summary"></p>
+    <ul id="warnings" class="warnings"></ul>
     <a id="openGoogle" class="primary button" target="_blank" rel="noopener">Open in Google Maps</a>
     <p class="muted small">Google announces each via-point as a stop. If you leave the route, tap <b>Recheck my route</b>.</p>
     <div class="row">

@@ -5,16 +5,18 @@ import type { Hotspot, LatLng, Route } from "./types";
 export type Place = { label: string; at: LatLng };
 
 export async function geocode(text: string, apiKey: string): Promise<Place[]> {
-  const { baseUrl, focus, country } = config.ors;
+  const { geocodeBaseUrl, focus, country } = config.ors;
   const params = new URLSearchParams({
-    api_key: apiKey,
     text,
     "boundary.country": country,
     "focus.point.lat": String(focus.lat),
     "focus.point.lon": String(focus.lng),
     size: "5",
   });
-  const res = await fetch(`${baseUrl}/geocode/search?${params}`);
+  // Key in a header, not the URL, so it stays out of logs and history.
+  const res = await fetch(`${geocodeBaseUrl}/search?${params}`, {
+    headers: { Authorization: apiKey },
+  });
   if (!res.ok) throw new Error(`Address search failed (${res.status}).`);
   const data = await res.json();
   return (data.features ?? []).map((f: any) => ({
@@ -29,7 +31,7 @@ export async function route(
   avoid: Hotspot[],
   apiKey: string,
 ): Promise<Route> {
-  const { baseUrl, profile } = config.ors;
+  const { routingBaseUrl, profile } = config.ors;
   const body: Record<string, unknown> = {
     coordinates: [
       [from.lng, from.lat],
@@ -38,7 +40,7 @@ export async function route(
   };
   if (avoid.length) body.options = { avoid_polygons: toAvoidMultiPolygon(avoid) };
 
-  const res = await fetch(`${baseUrl}/v2/directions/${profile}/geojson`, {
+  const res = await fetch(`${routingBaseUrl}/v2/directions/${profile}/geojson`, {
     method: "POST",
     headers: { Authorization: apiKey, "Content-Type": "application/json" },
     body: JSON.stringify(body),
