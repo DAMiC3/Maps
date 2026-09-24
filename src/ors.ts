@@ -31,12 +31,14 @@ export async function route(
   avoid: Hotspot[],
   apiKey: string,
 ): Promise<Route> {
-  const { routingBaseUrl, profile } = config.ors;
+  const { routingBaseUrl, profile, snapRadiusMeters } = config.ors;
   const body: Record<string, unknown> = {
     coordinates: [
       [from.lng, from.lat],
       [to.lng, to.lat],
     ],
+    // Places like airports or malls can geocode far from the nearest road.
+    radiuses: [snapRadiusMeters, snapRadiusMeters],
   };
   if (avoid.length) body.options = { avoid_polygons: toAvoidMultiPolygon(avoid) };
 

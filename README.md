@@ -29,6 +29,7 @@ Then open the printed URL, go to **Settings**, paste an OpenRouteService API key
 | --- | --- |
 | `npm run dev` | Local dev server |
 | `npm test` | Unit tests (Vitest) |
+| `ORS_KEY=... npx vitest run tests/live-trips.test.ts` | Run the test trips against the live routing API |
 | `npm run build` | Typecheck and build to `dist/` |
 | `node scripts/make-icons.mjs` | Regenerate PNG app icons from `public/icon.svg` |
 | `node scripts/make-icons.mjs` | Regenerate PNG app icons from `public/icon.svg` |

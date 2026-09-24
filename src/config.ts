@@ -32,6 +32,8 @@ export const config = {
     routingBaseUrl: "https://api.heigit.org/openrouteservice",
     geocodeBaseUrl: "https://api.heigit.org/pelias/v1",
     profile: "driving-car",
+    /** How far (m) ORS may search for a road from start/end (its default is 350). */
+    snapRadiusMeters: 1000,
     /** Published avoid_polygons limits (openrouteservice.org/restrictions). */
     maxAvoidAreaKm2: 200,
     maxAvoidExtentKm: 20,

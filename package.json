@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.22",
+    "@types/node": "^26.6.2",
     "jsdom": "^29.1.1",
     "sharp": "^0.35.4",
     "typescript": "^7.0.2",

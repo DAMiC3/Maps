@@ -3,9 +3,9 @@ import "leaflet/dist/leaflet.css";
 import "./styles.css";
 import { config } from "./config";
 import { parseKml } from "./kml";
-import { geocode, route, type Place } from "./ors";
-import { googleMapsUrl, pickViaPoints } from "./handoff";
-import { activeHotspots, hotspotRing, selectZonesForTrip, type SkipReason } from "./zones";
+import { geocode, type Place } from "./ors";
+import { planTrip } from "./plan";
+import { activeHotspots, hotspotRing, type SkipReason } from "./zones";
 import { notesToKml, store } from "./storage";
 import type { Hotspot, LatLng, Route } from "./types";
 
@@ -39,7 +39,7 @@ function drawZones(active: Hotspot[]) {
       .bindTooltip(
         `${h.name} · risk ${h.risk}${h.nightOnly ? " · after dark" : ""}` +
           `${h.mode === "prefer" ? " · prefer to avoid" : ""}${h.lastReport ? ` · last ${h.lastReport}` : ""}` +
-          `${on ? "" : " (inactive now)"}`,
+          `${on ? "" : " (not used right now)"}`,
       )
       .addTo(zoneLayer);
   }
@@ -189,36 +189,15 @@ const SKIP_TEXT: Record<SkipReason, string> = {
 async function findSafeRoute(origin: LatLng, dest: LatLng, when: Date) {
   const key = requireKey();
   setStatus("Finding routes…");
-  const normal = await route(origin, dest, [], key);
+  const { normal, safe, zones, skipped, droppedPrefer, via, googleUrl } =
+    await planTrip(origin, dest, hotspots, when, key);
 
-  const { zones: active, skipped } = selectZonesForTrip(
-    activeHotspots(hotspots, when), origin, dest, normal.coords,
-  );
-  const hard = active.filter((h) => h.mode === "avoid");
-  drawZones(active);
-
-  let safe: Route;
-  let droppedPrefer = false;
-  try {
-    safe = await route(origin, dest, active, key);
-    const extraMin = (safe.durationSeconds - normal.durationSeconds) / 60;
-    if (active.length > hard.length && extraMin > config.maxExtraMinutesForPreferZones) {
-      safe = await route(origin, dest, hard, key);
-      droppedPrefer = true;
-    }
-  } catch (e) {
-    if (active.length === hard.length) throw e;
-    // "prefer" areas (often large suburbs) may exceed ORS avoid-area limits.
-    safe = await route(origin, dest, hard, key);
-    droppedPrefer = true;
-  }
-
+  drawZones(zones);
   drawRoutes(normal, safe);
-  const via = pickViaPoints(safe.coords, normal.coords);
   const extra = Math.max(0, Math.round((safe.durationSeconds - normal.durationSeconds) / 60));
   $("summary").textContent =
     `${(safe.distanceMeters / 1000).toFixed(1)} km, about ${Math.round(safe.durationSeconds / 60)} min ` +
-    `(${extra ? `+${extra} min to avoid ${active.length} active zones` : "no detour needed"}). ` +
+    `(${extra ? `+${extra} min to avoid ${zones.length} zones near this route` : "no detour needed"}). ` +
     `${via.length} via-point${via.length === 1 ? "" : "s"}.` +
     (droppedPrefer ? " Large 'prefer to avoid' areas were skipped because the detour was too long." : "");
   $("warnings").replaceChildren(
@@ -228,7 +207,7 @@ async function findSafeRoute(origin: LatLng, dest: LatLng, when: Date) {
       }),
     ),
   );
-  $<HTMLAnchorElement>("openGoogle").href = googleMapsUrl(origin, dest, via);
+  $<HTMLAnchorElement>("openGoogle").href = googleUrl;
   $("result").hidden = false;
   setStatus("");
 }
