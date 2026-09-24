@@ -17,18 +17,9 @@
   </header>
 
   <section id="settings" class="panel" hidden>
-    <label>OpenRouteService API key
-      <input id="apiKey" type="password" autocomplete="off" placeholder="Paste your key" />
-    </label>
-    <label>Hotspots (KML exported from My Maps)
-      <input id="kmlFile" type="file" accept=".kml,application/vnd.google-earth.kml+xml" />
-    </label>
-    <p id="kmlStatus" class="muted">No hotspots loaded.</p>
-    <div class="row">
-      <button id="clearKml" class="ghost">Remove hotspots</button>
-      <button id="exportNotes" class="ghost">Export incident notes</button>
-    </div>
-    <p class="muted small">Your key, hotspots and notes are stored only in this browser.</p>
+    <p id="hotspotInfo" class="muted"></p>
+    <button id="exportNotes" class="ghost">Export incident notes</button>
+    <p class="muted small">Incident notes are stored only on this phone.</p>
   </section>
 
   <form id="tripForm" class="panel">

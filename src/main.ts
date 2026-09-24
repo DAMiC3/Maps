@@ -3,7 +3,8 @@ import "leaflet/dist/leaflet.css";
 import "./styles.css";
 import { config } from "./config";
 import { parseKml } from "./kml";
-import { geocode, type Place } from "./ors";
+import builtInHotspots from "./data/hotspots.kml?raw";
+import { geocode, route, viaProxy, type Place } from "./ors";
 import { planTrip } from "./plan";
 import { activeHotspots, hotspotRing, type SkipReason } from "./zones";
 import { notesToKml, store } from "./storage";
@@ -71,34 +72,14 @@ settingsBtn.onclick = () => {
   settingsBtn.setAttribute("aria-expanded", String(!panel.hidden));
 };
 
-const apiKeyInput = $<HTMLInputElement>("apiKey");
-apiKeyInput.value = store.getApiKey();
-apiKeyInput.onchange = () => store.setApiKey(apiKeyInput.value);
+// All routing and address search goes through the SafeRoute proxy, which holds the key.
+const endpoint = viaProxy(config.proxyUrl);
 
-function loadHotspots(kml: string | null) {
-  try {
-    hotspots = kml ? parseKml(kml) : [];
-    $("kmlStatus").textContent = hotspots.length
-      ? `${hotspots.length} hotspots loaded (${activeHotspots(hotspots, new Date()).length} active now).`
-      : "No hotspots loaded.";
-  } catch (e) {
-    hotspots = [];
-    $("kmlStatus").textContent = (e as Error).message;
-  }
-  drawZones(activeHotspots(hotspots, new Date()));
-}
-
-$<HTMLInputElement>("kmlFile").onchange = async (e) => {
-  const file = (e.target as HTMLInputElement).files?.[0];
-  if (!file) return;
-  const text = await file.text();
-  store.setKml(text);
-  loadHotspots(text);
-};
-$("clearKml").onclick = () => {
-  store.setKml(null);
-  loadHotspots(null);
-};
+// Hotspots ship with the app (src/data/hotspots.kml); users don't manage them.
+hotspots = parseKml(builtInHotspots);
+drawZones(activeHotspots(hotspots, new Date()));
+$("hotspotInfo").textContent =
+  `${hotspots.length} built-in hotspots, ${activeHotspots(hotspots, new Date()).length} active right now.`;
 $("exportNotes").onclick = () => {
   const notes = store.getNotes();
   if (!notes.length) return setStatus("No incident notes yet.");
@@ -124,8 +105,7 @@ function currentPosition(): Promise<LatLng> {
 }
 
 async function searchInto(input: HTMLInputElement, list: HTMLUListElement, pick: (p: Place) => void) {
-  const key = requireKey();
-  const results = await geocode(input.value, key);
+  const results = await geocode(input.value, endpoint);
   list.replaceChildren(
     ...results.map((r) => {
       const li = document.createElement("li");
@@ -149,7 +129,7 @@ function wireSearch(inputId: string, listId: string, pick: (p: Place | null) => 
   input.oninput = () => {
     pick(null);
     clearTimeout(timer);
-    if (input.value.trim().length < 3 || !store.getApiKey()) return list.replaceChildren();
+    if (input.value.trim().length < 3) return list.replaceChildren();
     timer = window.setTimeout(() => searchInto(input, list, pick).catch((e) => setStatus(e.message, true)), 400);
   };
 }
@@ -161,15 +141,6 @@ $("useLocation").onclick = async () => {
   from = null;
   setStatus("Using your current location.");
 };
-
-function requireKey(): string {
-  const key = store.getApiKey();
-  if (!key) {
-    $("settings").hidden = false;
-    throw new Error("Add your OpenRouteService API key in Settings first.");
-  }
-  return key;
-}
 
 // ---- routing ----
 /** Departure time from the "Leave at" field (today), or now if empty. */
@@ -193,10 +164,9 @@ const li = (text: string) => Object.assign(document.createElement("li"), { textC
 const mins = (r: Route) => Math.round(r.durationSeconds / 60);
 
 async function findSafeRoute(origin: LatLng, dest: LatLng, when: Date) {
-  const key = requireKey();
   setStatus("Finding routes…");
   const { normal, chosen, options, skipped, via, googleUrl } =
-    await planTrip(origin, dest, hotspots, when, key);
+    await planTrip(origin, dest, hotspots, when, (f, t, avoid) => route(f, t, avoid, endpoint));
   const r = chosen.route;
 
   drawZones(activeHotspots(hotspots, when), chosen.passes);
@@ -265,7 +235,6 @@ $("noteBtn").onclick = async () => {
   }
 };
 
-loadHotspots(store.getKml());
 
 // Offline shell + home-screen install. Skipped in dev so Vite reloads aren't cached.
 if (import.meta.env.PROD && "serviceWorker" in navigator) {

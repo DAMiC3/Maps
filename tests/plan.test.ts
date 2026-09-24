@@ -22,7 +22,7 @@ function fakeRouter(extraMin: number): Router {
 }
 
 const plan = (zones: Hotspot[], extraMin: number) =>
-  planTrip(origin, dest, zones, new Date(2026, 8, 24, 12), "k", fakeRouter(extraMin));
+  planTrip(origin, dest, zones, new Date(2026, 8, 24, 12), fakeRouter(extraMin));
 
 describe("planTrip weighs detour time against danger (worth: risk1 3, risk2 8, risk3 15 min)", () => {
   it("takes a 10 min detour around a risk-3 zone", async () => {

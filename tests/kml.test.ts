@@ -43,3 +43,11 @@ describe("parseRules", () => {
     expect(parseRules("Risk: 2\nnight_only = YES")).toEqual({ risk: "2", night_only: "yes" });
   });
 });
+
+describe("built-in hotspots", () => {
+  it("parse without errors", async () => {
+    const { readFileSync } = await import("fs");
+    const hs = parseKml(readFileSync("src/data/hotspots.kml", "utf8"));
+    expect(hs.length).toBeGreaterThan(20);
+  });
+});

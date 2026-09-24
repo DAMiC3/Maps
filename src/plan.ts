@@ -1,11 +1,11 @@
 import { config, type Risk } from "./config";
 import { lineEntersRing } from "./geo";
 import { googleMapsUrl, pickViaPoints } from "./handoff";
-import { route as orsRoute } from "./ors";
 import { activeHotspots, hotspotRing, selectZonesForTrip, type Skipped } from "./zones";
 import type { Hotspot, LatLng, Route } from "./types";
 
-export type Router = (from: LatLng, to: LatLng, avoid: Hotspot[], apiKey: string) => Promise<Route>;
+/** Gets one route avoiding the given zones (ORS via the proxy, or a fake in tests). */
+export type Router = (from: LatLng, to: LatLng, avoid: Hotspot[]) => Promise<Route>;
 
 /** One candidate route and what it costs. */
 export type RouteOption = {
@@ -55,10 +55,9 @@ export async function planTrip(
   dest: LatLng,
   hotspots: Hotspot[],
   when: Date,
-  apiKey: string,
-  router: Router = orsRoute,
+  router: Router,
 ): Promise<TripPlan> {
-  const normal = await router(origin, dest, [], apiKey);
+  const normal = await router(origin, dest, []);
   const active = activeHotspots(hotspots, when);
   const { zones: usable, skipped } = selectZonesForTrip(active, origin, dest, normal.coords);
 
@@ -75,7 +74,7 @@ export async function planTrip(
     tried.add(key);
     let r: Route;
     try {
-      r = await router(origin, dest, avoid, apiKey);
+      r = await router(origin, dest, avoid);
     } catch {
       return null; // ORS could not route around this set; other options remain.
     }

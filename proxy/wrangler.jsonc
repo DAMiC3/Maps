@@ -1,0 +1,20 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "saferoute-proxy",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-21",
+  "workers_dev": true,
+  "observability": { "enabled": true },
+
+  "vars": {
+    // Sites allowed to call the proxy (comma-separated, exact origins).
+    "ALLOWED_ORIGINS": "https://damic3.github.io,http://localhost:5173"
+  },
+
+  // Per-IP limit. One trip plans with up to ~22 routing calls, plus address search.
+  "ratelimits": [
+    { "name": "RATE_LIMITER", "namespace_id": "4711", "simple": { "limit": 60, "period": 60 } }
+  ]
+
+  // Secret (never in this file): ORS_KEY — set with `npx wrangler secret put ORS_KEY`.
+}

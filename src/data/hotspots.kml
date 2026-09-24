@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Built-in hotspot list. DRAFT researched from public news/police/security sources (2023-2026), 2026-09-24.
+     Unreviewed. To update: edit in My Maps, export KML, replace this file, push. -->
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+  <name>SafeRoute Pretoria hotspots (draft)</name>
+  <Placemark>
+    <name>N1 Garsfontein Rd off-ramp</name>
+    <description>risk=3; night_only=no; mode=avoid; last=2026-09</description>
+    <Point><coordinates>28.27025,-25.78481,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N4 Watermeyer St interchange</name>
+    <description>risk=3; night_only=yes; mode=avoid; last=2026-09</description>
+    <Point><coordinates>28.29224,-25.74573,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>R80 Mabopane Hwy at Theo Martins Poort</name>
+    <description>risk=3; night_only=yes; mode=avoid; last=2024-04</description>
+    <Point><coordinates>28.1228,-25.699,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N1 Atterbury Rd off-ramp</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.27193,-25.77837,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N1 Lynnwood Rd off-ramp</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.2748,-25.76609,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N1 Rigel Ave off-ramp</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.25879,-25.80916,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N1 John Vorster Dr off-ramp</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.19242,-25.86712,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N14 Jean Ave off-ramp</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.18433,-25.83895,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N4 Simon Vermooten Rd interchange</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.32548,-25.75233,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N4 Rossouw St interchange</name>
+    <description>risk=2; night_only=yes; mode=avoid; last=2026-09</description>
+    <Point><coordinates>28.3046,-25.7531,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Fountains Circle</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2024-07</description>
+    <Point><coordinates>28.1988,-25.7731,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N14 Eeufees Rd interchange</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2024-07</description>
+    <Point><coordinates>28.19069,-25.78202,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>N14 R55 interchange</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-01</description>
+    <Point><coordinates>28.10408,-25.89437,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Lynnwood Rd and University Rd</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.22516,-25.75595,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Burnett St and Hilda St</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.23517,-25.75059,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Lynnwood Rd and Solomon Mahlangu Dr</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.34419,-25.77845,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Garsfontein Rd and Delfi Ave</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.30021,-25.80767,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Garsfontein Rd and De Villebois Mareuil Dr</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.30976,-25.8235,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Paul Kruger St through Wonderboompoort</name>
+    <description>risk=2; night_only=no; mode=avoid; last=2026-04</description>
+    <Point><coordinates>28.1869,-25.6905,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Nossob St and Rigel Ave South</name>
+    <description>risk=1; night_only=no; mode=avoid; last=2024-07</description>
+    <Point><coordinates>28.2625,-25.8168,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>Mamelodi East (area)</name>
+    <description>risk=2; night_only=no; mode=prefer; last=2026-08</description>
+    <Polygon><outerBoundaryIs><LinearRing><coordinates>28.43988,-25.71000,0 28.43852,-25.70063,0 28.43454,-25.69191,0 28.42820,-25.68441,0 28.41994,-25.67866,0 28.41032,-25.67505,0 28.40000,-25.67381,0 28.38968,-25.67505,0 28.38006,-25.67866,0 28.37180,-25.68441,0 28.36546,-25.69191,0 28.36148,-25.70063,0 28.36012,-25.71000,0 28.36148,-25.71937,0 28.36546,-25.72809,0 28.37180,-25.73559,0 28.38006,-25.74134,0 28.38968,-25.74495,0 28.40000,-25.74619,0 28.41032,-25.74495,0 28.41994,-25.74134,0 28.42820,-25.73559,0 28.43454,-25.72809,0 28.43852,-25.71937,0 28.43988,-25.71000,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark>
+    <name>Pretoria West (area)</name>
+    <description>risk=2; night_only=no; mode=prefer; last=2026-08</description>
+    <Polygon><outerBoundaryIs><LinearRing><coordinates>28.18487,-25.75000,0 28.18317,-25.73829,0 28.17819,-25.72738,0 28.17026,-25.71802,0 28.15993,-25.71083,0 28.14791,-25.70631,0 28.13500,-25.70477,0 28.12209,-25.70631,0 28.11007,-25.71083,0 28.09974,-25.71802,0 28.09181,-25.72738,0 28.08683,-25.73829,0 28.08513,-25.75000,0 28.08683,-25.76171,0 28.09181,-25.77262,0 28.09974,-25.78198,0 28.11007,-25.78917,0 28.12209,-25.79369,0 28.13500,-25.79523,0 28.14791,-25.79369,0 28.15993,-25.78917,0 28.17026,-25.78198,0 28.17819,-25.77262,0 28.18317,-25.76171,0 28.18487,-25.75000,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark>
+    <name>Akasia (area)</name>
+    <description>risk=2; night_only=no; mode=prefer; last=2026-08</description>
+    <Polygon><outerBoundaryIs><LinearRing><coordinates>28.14683,-25.65550,0 28.14513,-25.64379,0 28.14015,-25.63288,0 28.13223,-25.62352,0 28.12191,-25.61633,0 28.10990,-25.61181,0 28.09700,-25.61027,0 28.08410,-25.61181,0 28.07209,-25.61633,0 28.06177,-25.62352,0 28.05385,-25.63288,0 28.04887,-25.64379,0 28.04717,-25.65550,0 28.04887,-25.66721,0 28.05385,-25.67812,0 28.06177,-25.68748,0 28.07209,-25.69467,0 28.08410,-25.69919,0 28.09700,-25.70073,0 28.10990,-25.69919,0 28.12191,-25.69467,0 28.13223,-25.68748,0 28.14015,-25.67812,0 28.14513,-25.66721,0 28.14683,-25.65550,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark>
+    <name>Olievenhoutbosch (area)</name>
+    <description>risk=2; night_only=no; mode=prefer; last=2026-08</description>
+    <Polygon><outerBoundaryIs><LinearRing><coordinates>28.12296,-25.90500,0 28.12194,-25.89798,0 28.11895,-25.89143,0 28.11418,-25.88581,0 28.10798,-25.88150,0 28.10075,-25.87879,0 28.09300,-25.87786,0 28.08525,-25.87879,0 28.07802,-25.88150,0 28.07182,-25.88581,0 28.06705,-25.89143,0 28.06406,-25.89798,0 28.06304,-25.90500,0 28.06406,-25.91202,0 28.06705,-25.91857,0 28.07182,-25.92419,0 28.07802,-25.92850,0 28.08525,-25.93121,0 28.09300,-25.93214,0 28.10075,-25.93121,0 28.10798,-25.92850,0 28.11418,-25.92419,0 28.11895,-25.91857,0 28.12194,-25.91202,0 28.12296,-25.90500,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark>
+    <name>Soshanguve (area)</name>
+    <description>risk=2; night_only=no; mode=prefer; last=2026-08</description>
+    <Polygon><outerBoundaryIs><LinearRing><coordinates>28.13476,-25.50000,0 28.13307,-25.48829,0 28.12810,-25.47738,0 28.12019,-25.46802,0 28.10988,-25.46083,0 28.09788,-25.45631,0 28.08500,-25.45477,0 28.07212,-25.45631,0 28.06012,-25.46083,0 28.04981,-25.46802,0 28.04190,-25.47738,0 28.03693,-25.48829,0 28.03524,-25.50000,0 28.03693,-25.51171,0 28.04190,-25.52262,0 28.04981,-25.53198,0 28.06012,-25.53917,0 28.07212,-25.54369,0 28.08500,-25.54523,0 28.09788,-25.54369,0 28.10988,-25.53917,0 28.12019,-25.53198,0 28.12810,-25.52262,0 28.13307,-25.51171,0 28.13476,-25.50000,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark>
+    <name>Silverton (area)</name>
+    <description>risk=2; night_only=no; mode=prefer; last=2026-08</description>
+    <Polygon><outerBoundaryIs><LinearRing><coordinates>28.32992,-25.73300,0 28.32890,-25.72598,0 28.32591,-25.71943,0 28.32115,-25.71381,0 28.31496,-25.70950,0 28.30774,-25.70679,0 28.30000,-25.70586,0 28.29226,-25.70679,0 28.28504,-25.70950,0 28.27885,-25.71381,0 28.27409,-25.71943,0 28.27110,-25.72598,0 28.27008,-25.73300,0 28.27110,-25.74002,0 28.27409,-25.74657,0 28.27885,-25.75219,0 28.28504,-25.75650,0 28.29226,-25.75921,0 28.30000,-25.76014,0 28.30774,-25.75921,0 28.31496,-25.75650,0 28.32115,-25.75219,0 28.32591,-25.74657,0 28.32890,-25.74002,0 28.32992,-25.73300,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark>
+    <name>Sunnyside (area)</name>
+    <description>risk=2; night_only=no; mode=prefer; last=2026-08</description>
+    <Polygon><outerBoundaryIs><LinearRing><coordinates>28.22696,-25.75750,0 28.22645,-25.75399,0 28.22496,-25.75072,0 28.22258,-25.74790,0 28.21948,-25.74575,0 28.21587,-25.74439,0 28.21200,-25.74393,0 28.20813,-25.74439,0 28.20452,-25.74575,0 28.20142,-25.74790,0 28.19904,-25.75072,0 28.19755,-25.75399,0 28.19704,-25.75750,0 28.19755,-25.76101,0 28.19904,-25.76428,0 28.20142,-25.76710,0 28.20452,-25.76925,0 28.20813,-25.77061,0 28.21200,-25.77107,0 28.21587,-25.77061,0 28.21948,-25.76925,0 28.22258,-25.76710,0 28.22496,-25.76428,0 28.22645,-25.76101,0 28.22696,-25.75750,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+  <Placemark>
+    <name>Pretoria CBD and Marabastad (area)</name>
+    <description>risk=2; night_only=no; mode=prefer; last=2026-08</description>
+    <Polygon><outerBoundaryIs><LinearRing><coordinates>28.20595,-25.74800,0 28.20527,-25.74332,0 28.20327,-25.73895,0 28.20010,-25.73521,0 28.19597,-25.73233,0 28.19116,-25.73052,0 28.18600,-25.72991,0 28.18084,-25.73052,0 28.17603,-25.73233,0 28.17190,-25.73521,0 28.16873,-25.73895,0 28.16673,-25.74332,0 28.16605,-25.74800,0 28.16673,-25.75268,0 28.16873,-25.75705,0 28.17190,-25.76079,0 28.17603,-25.76367,0 28.18084,-25.76548,0 28.18600,-25.76609,0 28.19116,-25.76548,0 28.19597,-25.76367,0 28.20010,-25.76079,0 28.20327,-25.75705,0 28.20527,-25.75268,0 28.20595,-25.74800,0</coordinates></LinearRing></outerBoundaryIs></Polygon>
+  </Placemark>
+</Document></kml>

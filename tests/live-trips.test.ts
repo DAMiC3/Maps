@@ -1,15 +1,16 @@
 // Live end-to-end check of the proposed test trips (docs/BLUEPRINT.md) against
 // the real OpenRouteService API. Skipped unless ORS_KEY is set:
 //   ORS_KEY=... npx vitest run tests/live-trips.test.ts
-// Uses my-hotspots-draft.kml if present (never committed), else the sample file.
-import { existsSync, readFileSync } from "fs";
+// Uses the built-in hotspot list.
+import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 import { parseKml } from "../src/kml";
 import { planTrip } from "../src/plan";
+import { direct, route } from "../src/ors";
 import type { LatLng } from "../src/types";
 
 const key = process.env.ORS_KEY ?? "";
-const file = existsSync("my-hotspots-draft.kml") ? "my-hotspots-draft.kml" : "docs/sample-hotspots.kml";
+const file = "src/data/hotspots.kml";
 const hotspots = parseKml(readFileSync(file, "utf8"));
 
 const P: Record<string, LatLng> = {
@@ -38,7 +39,7 @@ const at = (hhmm: string) => {
 describe.skipIf(!key)(`live test trips (${file})`, () => {
   for (const [from, to, time, mustConsider] of trips) {
     it(`${from} -> ${to} at ${time}`, async () => {
-      const plan = await planTrip(P[from], P[to], hotspots, at(time), key);
+      const plan = await planTrip(P[from], P[to], hotspots, at(time), (f, t, avoid) => route(f, t, avoid, direct(key)));
       const min = (r: { durationSeconds: number }) => Math.round(r.durationSeconds / 60);
       const names = (hs: { name: string; risk: number }[]) => hs.map((h) => `${h.name} (r${h.risk})`).join(", ") || "none";
 

@@ -4,8 +4,30 @@ import type { Hotspot, LatLng, Route } from "./types";
 
 export type Place = { label: string; at: LatLng };
 
-export async function geocode(text: string, apiKey: string): Promise<Place[]> {
-  const { geocodeBaseUrl, focus, country } = config.ors;
+/** Where requests go: the SafeRoute proxy (app) or ORS directly with a key (owner tests). */
+export type Endpoint = { routeUrl: string; geocodeUrl: string; headers: Record<string, string> };
+
+export function viaProxy(baseUrl: string): Endpoint {
+  return { routeUrl: `${baseUrl}/route`, geocodeUrl: `${baseUrl}/geocode`, headers: {} };
+}
+
+export function direct(apiKey: string): Endpoint {
+  const { routingBaseUrl, geocodeBaseUrl, profile } = config.ors;
+  return {
+    routeUrl: `${routingBaseUrl}/v2/directions/${profile}/geojson`,
+    geocodeUrl: `${geocodeBaseUrl}/search`,
+    // Key in a header, not the URL, so it stays out of logs and history.
+    headers: { Authorization: apiKey },
+  };
+}
+
+async function errorMessage(res: Response, fallback: string): Promise<string> {
+  const detail = await res.json().catch(() => null);
+  return detail?.error?.message ?? `${fallback} (${res.status}).`;
+}
+
+export async function geocode(text: string, ep: Endpoint): Promise<Place[]> {
+  const { focus, country } = config.ors;
   const params = new URLSearchParams({
     text,
     "boundary.country": country,
@@ -13,11 +35,8 @@ export async function geocode(text: string, apiKey: string): Promise<Place[]> {
     "focus.point.lon": String(focus.lng),
     size: "5",
   });
-  // Key in a header, not the URL, so it stays out of logs and history.
-  const res = await fetch(`${geocodeBaseUrl}/search?${params}`, {
-    headers: { Authorization: apiKey },
-  });
-  if (!res.ok) throw new Error(`Address search failed (${res.status}).`);
+  const res = await fetch(`${ep.geocodeUrl}?${params}`, { headers: ep.headers });
+  if (!res.ok) throw new Error(await errorMessage(res, "Address search failed"));
   const data = await res.json();
   return (data.features ?? []).map((f: any) => ({
     label: f.properties.label,
@@ -25,13 +44,8 @@ export async function geocode(text: string, apiKey: string): Promise<Place[]> {
   }));
 }
 
-export async function route(
-  from: LatLng,
-  to: LatLng,
-  avoid: Hotspot[],
-  apiKey: string,
-): Promise<Route> {
-  const { routingBaseUrl, profile, snapRadiusMeters } = config.ors;
+export async function route(from: LatLng, to: LatLng, avoid: Hotspot[], ep: Endpoint): Promise<Route> {
+  const { snapRadiusMeters } = config.ors;
   const body: Record<string, unknown> = {
     coordinates: [
       [from.lng, from.lat],
@@ -42,15 +56,12 @@ export async function route(
   };
   if (avoid.length) body.options = { avoid_polygons: toAvoidMultiPolygon(avoid) };
 
-  const res = await fetch(`${routingBaseUrl}/v2/directions/${profile}/geojson`, {
+  const res = await fetch(ep.routeUrl, {
     method: "POST",
-    headers: { Authorization: apiKey, "Content-Type": "application/json" },
+    headers: { ...ep.headers, "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
-  if (!res.ok) {
-    const detail = await res.json().catch(() => null);
-    throw new Error(detail?.error?.message ?? `Routing failed (${res.status}).`);
-  }
+  if (!res.ok) throw new Error(await errorMessage(res, "Routing failed"));
   const data = await res.json();
   const feature = data.features[0];
   return {

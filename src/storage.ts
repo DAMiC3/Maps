@@ -1,7 +1,7 @@
 // Everything lives only in this phone's browser. Nothing is uploaded.
 import type { LatLng } from "./types";
 
-const KEYS = { kml: "sr.kml", apiKey: "sr.orsKey", notes: "sr.notes" };
+const KEYS = { notes: "sr.notes" };
 
 export type IncidentNote = { at: LatLng; time: string; text: string };
 
@@ -23,10 +23,6 @@ function set(key: string, value: string | null): void {
 }
 
 export const store = {
-  getKml: () => get(KEYS.kml),
-  setKml: (v: string | null) => set(KEYS.kml, v),
-  getApiKey: () => get(KEYS.apiKey) || import.meta.env.VITE_ORS_KEY || "",
-  setApiKey: (v: string) => set(KEYS.apiKey, v.trim() || null),
   getNotes: (): IncidentNote[] => {
     try {
       return JSON.parse(get(KEYS.notes) ?? "[]");

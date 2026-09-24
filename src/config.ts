@@ -31,6 +31,12 @@ export const config = {
   /** Only zones within this distance (m) of the normal route are sent to ORS. */
   corridorMeters: 5000,
 
+  /**
+   * SafeRoute proxy (Cloudflare Worker in proxy/) that holds the ORS key.
+   * Override with VITE_PROXY_URL for local testing against `wrangler dev`.
+   */
+  proxyUrl: import.meta.env.VITE_PROXY_URL || "https://saferoute-proxy.REPLACE_ME.workers.dev",
+
   ors: {
     // api.openrouteservice.org was deprecated on 2026-04-28 (reduced quota).
     // No trailing slashes: they cause 405 errors on the new host.
