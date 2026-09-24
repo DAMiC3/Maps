@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.env.local
+*.local.kml
+my-hotspots*.kml
+.DS_Store

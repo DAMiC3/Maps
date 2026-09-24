@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAMPLE ONLY: approximate coordinates for testing the app.
+     Replace with your own My Maps export. Rules go in the description. -->
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+  <name>SafeRoute sample hotspots</name>
+  <Placemark>
+    <name>SAMPLE - N1 Garsfontein off-ramp</name>
+    <description>risk=3; night_only=yes</description>
+    <Point><coordinates>28.2975,-25.7905,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>SAMPLE - Fountains Circle</name>
+    <description>risk=2; night_only=no</description>
+    <Point><coordinates>28.1905,-25.7690,0</coordinates></Point>
+  </Placemark>
+  <Placemark>
+    <name>SAMPLE - N4 Watermeyer interchange</name>
+    <description>risk=2; night_only=yes</description>
+    <Point><coordinates>28.2585,-25.7255,0</coordinates></Point>
+  </Placemark>
+</Document>
+</kml>

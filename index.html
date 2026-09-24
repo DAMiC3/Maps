@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SafeRoute Pretoria</title>
+  <meta name="theme-color" content="#1E2A32" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+<body>
+  <header class="bar">
+    <h1>SafeRoute</h1>
+    <button id="settingsBtn" class="ghost" aria-expanded="false" aria-controls="settings">Settings</button>
+  </header>
+
+  <section id="settings" class="panel" hidden>
+    <label>OpenRouteService API key
+      <input id="apiKey" type="password" autocomplete="off" placeholder="Paste your key" />
+    </label>
+    <label>Hotspots (KML exported from My Maps)
+      <input id="kmlFile" type="file" accept=".kml,application/vnd.google-earth.kml+xml" />
+    </label>
+    <p id="kmlStatus" class="muted">No hotspots loaded.</p>
+    <div class="row">
+      <button id="clearKml" class="ghost">Remove hotspots</button>
+      <button id="exportNotes" class="ghost">Export incident notes</button>
+    </div>
+    <p class="muted small">Your key, hotspots and notes are stored only in this browser.</p>
+  </section>
+
+  <form id="tripForm" class="panel">
+    <div class="field">
+      <label for="from">From</label>
+      <div class="row">
+        <input id="from" placeholder="Current location" autocomplete="off" />
+        <button type="button" id="useLocation" class="ghost" title="Use my location">📍</button>
+      </div>
+      <ul id="fromResults" class="results"></ul>
+    </div>
+    <div class="field">
+      <label for="to">To</label>
+      <input id="to" placeholder="Search a destination" autocomplete="off" required />
+      <ul id="toResults" class="results"></ul>
+    </div>
+    <button type="submit" id="goBtn" class="primary">Find safe route</button>
+  </form>
+
+  <p id="status" class="status" role="status" aria-live="polite"></p>
+
+  <div id="map" aria-label="Route preview map"></div>
+
+  <section id="result" class="panel" hidden>
+    <p id="summary"></p>
+    <a id="openGoogle" class="primary button" target="_blank" rel="noopener">Open in Google Maps</a>
+    <p class="muted small">Google announces each via-point as a stop. If you leave the route, tap <b>Recheck my route</b>.</p>
+    <div class="row">
+      <button id="recheck" class="ghost">Recheck my route</button>
+      <button id="noteBtn" class="ghost">Note an incident</button>
+    </div>
+  </section>
+
+  <footer class="muted small disclaimer">
+    SafeRoute reduces exposure to known hotspots. It cannot guarantee safety.
+    In an emergency call <a href="tel:10111">10111</a>.
+  </footer>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
