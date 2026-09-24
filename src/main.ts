@@ -25,21 +25,24 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 const zoneLayer = L.layerGroup().addTo(map);
 const routeLayer = L.layerGroup().addTo(map);
 
-function drawZones(active: Hotspot[]) {
+/** Draw all zones: active ones filled by risk, ones the route passes outlined in amber. */
+function drawZones(active: Hotspot[], passed: Hotspot[] = []) {
   zoneLayer.clearLayers();
   const activeSet = new Set(active);
+  const passedSet = new Set(passed);
   for (const h of hotspots) {
     const on = activeSet.has(h);
+    const hit = passedSet.has(h);
     L.polygon(hotspotRing(h).map((p) => [p.lat, p.lng] as [number, number]), {
-      color: "#be3a2a",
-      weight: 1.5,
+      color: hit ? "#d99a00" : "#be3a2a",
+      weight: hit ? 3 : 1.5,
       dashArray: on ? undefined : "4 6",
-      fillOpacity: on ? (h.mode === "prefer" ? 0.08 : 0.18) : 0.03,
+      fillOpacity: on ? 0.06 * h.risk : 0.03,
     })
       .bindTooltip(
         `${h.name} · risk ${h.risk}${h.nightOnly ? " · after dark" : ""}` +
-          `${h.mode === "prefer" ? " · prefer to avoid" : ""}${h.lastReport ? ` · last ${h.lastReport}` : ""}` +
-          `${on ? "" : " (not used right now)"}`,
+          `${h.lastReport ? ` · last ${h.lastReport}` : ""}` +
+          `${hit ? " · route passes here" : on ? "" : " (not active at this time)"}`,
       )
       .addTo(zoneLayer);
   }
@@ -186,25 +189,43 @@ const SKIP_TEXT: Record<SkipReason, string> = {
   "over-total-area": "the total avoid area is over the routing service limit",
 };
 
+const li = (text: string) => Object.assign(document.createElement("li"), { textContent: text });
+const mins = (r: Route) => Math.round(r.durationSeconds / 60);
+
 async function findSafeRoute(origin: LatLng, dest: LatLng, when: Date) {
   const key = requireKey();
   setStatus("Finding routes…");
-  const { normal, safe, zones, skipped, droppedPrefer, via, googleUrl } =
+  const { normal, chosen, options, skipped, via, googleUrl } =
     await planTrip(origin, dest, hotspots, when, key);
+  const r = chosen.route;
 
-  drawZones(zones);
-  drawRoutes(normal, safe);
-  const extra = Math.max(0, Math.round((safe.durationSeconds - normal.durationSeconds) / 60));
+  drawZones(activeHotspots(hotspots, when), chosen.passes);
+  drawRoutes(normal, r);
+  const extra = Math.max(0, mins(r) - mins(normal));
   $("summary").textContent =
-    `${(safe.distanceMeters / 1000).toFixed(1)} km, about ${Math.round(safe.durationSeconds / 60)} min ` +
-    `(${extra ? `+${extra} min to avoid ${zones.length} zones near this route` : "no detour needed"}). ` +
-    `${via.length} via-point${via.length === 1 ? "" : "s"}.` +
-    (droppedPrefer ? " Large 'prefer to avoid' areas were skipped because the detour was too long." : "");
+    `${(r.distanceMeters / 1000).toFixed(1)} km, about ${mins(r)} min` +
+    (extra ? ` (+${extra} min to avoid ${chosen.avoided.length} zone${chosen.avoided.length === 1 ? "" : "s"}).` : " (fastest route).") +
+    (via.length ? ` ${via.length} via-point${via.length === 1 ? "" : "s"}.` : "");
+
+  // Zones the chosen route still passes, with the cheapest option that would avoid each.
+  const passWarnings = chosen.passes.map((h) => {
+    const around = options.find((o) => !o.passes.includes(h));
+    const why = around
+      ? `; the best route around it takes ${mins(around.route)} min` +
+        (around.passes.length ? ` and passes ${around.passes.length} other zone${around.passes.length === 1 ? "" : "s"}` : "") +
+        ", which is not worth it"
+      : "; no route around it was found";
+    return li(`Passes through ${h.name} (risk ${h.risk})${why}.`);
+  });
   $("warnings").replaceChildren(
-    ...skipped.map((s) =>
-      Object.assign(document.createElement("li"), {
-        textContent: `Not avoided: ${s.hotspot.name}, because ${SKIP_TEXT[s.reason]}.`,
-      }),
+    ...passWarnings,
+    ...skipped
+      .filter((s) => s.reason !== "contains-endpoint" || chosen.passes.includes(s.hotspot))
+      .map((s) => li(`Could not avoid ${s.hotspot.name}: ${SKIP_TEXT[s.reason]}.`)),
+  );
+  $("options").replaceChildren(
+    ...options.map((o) =>
+      li(`${o === chosen ? "✔ " : ""}${o.label}: ${mins(o.route)} min, passes ${o.passes.length} zone${o.passes.length === 1 ? "" : "s"}, score ${Math.round(o.cost)}`),
     ),
   );
   $<HTMLAnchorElement>("openGoogle").href = googleUrl;

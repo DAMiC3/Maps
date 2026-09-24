@@ -33,7 +33,7 @@ export type Skipped = { hotspot: Hotspot; reason: SkipReason };
  *   so ORS only sees zones near this trip.
  * - Zones over the ORS size limits are skipped (not shrunk), with a warning.
  * - The total area is kept under the limit, highest priority first
- *   (hard "avoid" before "prefer", then higher risk).
+ *   (higher risk first, then smaller zones).
  */
 export function selectZonesForTrip(
   active: Hotspot[],
@@ -63,11 +63,7 @@ export function selectZonesForTrip(
     candidates.push({ hotspot, area });
   }
 
-  candidates.sort(
-    (a, b) =>
-      Number(a.hotspot.mode === "prefer") - Number(b.hotspot.mode === "prefer") ||
-      b.hotspot.risk - a.hotspot.risk,
-  );
+  candidates.sort((a, b) => b.hotspot.risk - a.hotspot.risk || a.area - b.area);
   const zones: Hotspot[] = [];
   let total = 0;
   for (const c of candidates) {

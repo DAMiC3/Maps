@@ -4,7 +4,7 @@ import type { Hotspot } from "../src/types";
 
 const at = (h: number) => new Date(2026, 8, 24, h, 0);
 const pin = (nightOnly: boolean): Hotspot => ({
-  name: "x", risk: 2, nightOnly, mode: "avoid",
+  name: "x", risk: 2, nightOnly,
   shape: { kind: "point", at: { lat: -25.75, lng: 28.23 } },
 });
 

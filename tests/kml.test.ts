@@ -7,7 +7,7 @@ const kml = `<?xml version="1.0"?>
     <description><![CDATA[risk=3<br>night_only=yes<br>last=2026-09-01]]></description>
     <Point><coordinates>28.30,-25.79,0</coordinates></Point></Placemark>
   <Placemark><name>Suburb B</name>
-    <description>mode=prefer; risk=1</description>
+    <description>risk=1</description>
     <Polygon><outerBoundaryIs><LinearRing><coordinates>
       28.1,-25.7,0 28.2,-25.7,0 28.2,-25.8,0 28.1,-25.7,0
     </coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
@@ -19,19 +19,18 @@ describe("parseKml", () => {
 
   it("reads pins with rules from the description", () => {
     expect(hs[0]).toMatchObject({
-      name: "Off-ramp A", risk: 3, nightOnly: true, mode: "avoid", lastReport: "2026-09-01",
+      name: "Off-ramp A", risk: 3, nightOnly: true, lastReport: "2026-09-01",
       shape: { kind: "point", at: { lat: -25.79, lng: 28.3 } },
     });
   });
 
-  it("reads polygons and prefer mode", () => {
-    expect(hs[1].mode).toBe("prefer");
+  it("reads polygons", () => {
     expect(hs[1].risk).toBe(1);
     expect(hs[1].shape.kind).toBe("polygon");
   });
 
   it("falls back to defaults", () => {
-    expect(hs[2]).toMatchObject({ risk: 2, nightOnly: false, mode: "avoid" });
+    expect(hs[2]).toMatchObject({ risk: 2, nightOnly: false });
   });
 
   it("rejects non-KML", () => {

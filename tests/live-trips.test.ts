@@ -6,8 +6,6 @@ import { existsSync, readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 import { parseKml } from "../src/kml";
 import { planTrip } from "../src/plan";
-import { pointInRing } from "../src/geo";
-import { hotspotRing } from "../src/zones";
 import type { LatLng } from "../src/types";
 
 const key = process.env.ORS_KEY ?? "";
@@ -38,28 +36,25 @@ const at = (hhmm: string) => {
 };
 
 describe.skipIf(!key)(`live test trips (${file})`, () => {
-  for (const [from, to, time, mustAvoid] of trips) {
+  for (const [from, to, time, mustConsider] of trips) {
     it(`${from} -> ${to} at ${time}`, async () => {
       const plan = await planTrip(P[from], P[to], hotspots, at(time), key);
-      const min = (s: number) => Math.round(s / 60);
-      const entered = (line: LatLng[]) =>
-        hotspots.filter((h) => line.some((p) => pointInRing(p, hotspotRing(h)))).map((h) => h.name);
+      const min = (r: { durationSeconds: number }) => Math.round(r.durationSeconds / 60);
+      const names = (hs: { name: string; risk: number }[]) => hs.map((h) => `${h.name} (r${h.risk})`).join(", ") || "none";
 
       console.log(
         [
-          `\n=== ${from} -> ${to} at ${time}`,
-          `normal: ${(plan.normal.distanceMeters / 1000).toFixed(1)} km, ${min(plan.normal.durationSeconds)} min; passes: ${entered(plan.normal.coords).join(", ") || "none"}`,
-          `avoid : ${(plan.safe.distanceMeters / 1000).toFixed(1)} km, ${min(plan.safe.durationSeconds)} min; passes: ${entered(plan.safe.coords).join(", ") || "none"}`,
-          `zones avoided: ${plan.zones.length}${plan.droppedPrefer ? " (prefer areas dropped)" : ""}; skipped: ${plan.skipped.map((s) => `${s.hotspot.name} [${s.reason}]`).join(", ") || "none"}`,
-          `via-points: ${plan.via.length}; ${plan.googleUrl}`,
+          `\n=== ${from} -> ${to} at ${time}  (should consider: ${mustConsider.join(", ")})`,
+          ...plan.options.map(
+            (o) => `${o === plan.chosen ? "*" : " "} ${o.label.padEnd(20)} ${String(min(o.route)).padStart(3)} min  score ${Math.round(o.cost)}  passes: ${names(o.passes)}`,
+          ),
+          `  skipped: ${plan.skipped.map((s) => `${s.hotspot.name} [${s.reason}]`).join(", ") || "none"}`,
+          `  via-points: ${plan.via.length}; ${plan.googleUrl}`,
         ].join("\n"),
       );
 
-      // Every must-avoid hotspot that was sent to ORS must actually be avoided.
-      const avoided = new Set(plan.zones.map((h) => h.name));
-      for (const name of mustAvoid.filter((n) => avoided.has(n))) {
-        expect(entered(plan.safe.coords), `${name} entered`).not.toContain(name);
-      }
+      // The chosen option must be the cheapest one tried.
+      for (const o of plan.options) expect(plan.chosen.cost).toBeLessThanOrEqual(o.cost);
     }, 60_000);
   }
 });

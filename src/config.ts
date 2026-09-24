@@ -11,8 +11,13 @@ export const config = {
   /** "After dark" window for night_only zones, local 24h hours. Wraps midnight. */
   night: { startHour: 18, endHour: 6 },
 
-  /** "Prefer to avoid" zones are dropped if avoiding them costs more than this. */
-  maxExtraMinutesForPreferZones: 10,
+  /**
+   * How many extra driving minutes it is worth to avoid ONE zone of each risk
+   * level. A route's cost = driving minutes + this value for every zone it
+   * passes through; the cheapest route wins. So a detour around a risk-3 spot
+   * is taken if it costs up to 15 min, and two risk-2 spots justify 16 min.
+   */
+  detourWorthMinutes: { 1: 3, 2: 8, 3: 15 } as Record<Risk, number>,
 
   /** Sides of the polygon used to approximate each circle. */
   circleSegments: 16,

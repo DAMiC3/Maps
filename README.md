@@ -37,12 +37,15 @@ Then open the printed URL, go to **Settings**, paste an OpenRouteService API key
 ## Hotspot format (My Maps pin description)
 
 ```
-risk=3; night_only=yes; mode=avoid; last=2026-09-01
+risk=3; night_only=yes; last=2026-09-01
 ```
 
 - `risk` 1–3 sets the no-go circle size (see `src/config.ts`).
 - `night_only=yes` applies the zone only after dark (judged by the **Leave at** time).
-- `mode=prefer` means "avoid if the detour is short" (use for suburb-sized areas).
+- Each risk level is worth a number of detour minutes (`detourWorthMinutes` in
+  `src/config.ts`). A route costs its driving minutes plus that value for every
+  zone it passes through; the cheapest route wins. So a detour is only taken
+  when the danger it avoids is worth the extra time.
 - Polygons drawn in My Maps are used as-is.
 
 ## Project layout

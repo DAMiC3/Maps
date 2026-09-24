@@ -50,6 +50,31 @@ export function pointInRing(p: LatLng, ring: LatLng[]): boolean {
   return inside;
 }
 
+function segmentsCross(a: LatLng, b: LatLng, c: LatLng, d: LatLng): boolean {
+  const orient = (p: LatLng, q: LatLng, r: LatLng) =>
+    Math.sign((q.lng - p.lng) * (r.lat - p.lat) - (q.lat - p.lat) * (r.lng - p.lng));
+  return orient(a, b, c) !== orient(a, b, d) && orient(c, d, a) !== orient(c, d, b);
+}
+
+/**
+ * Does the polyline enter the ring? Checks vertices and edge crossings, since
+ * a straight freeway segment can cut through a small zone with no vertex inside.
+ */
+export function lineEntersRing(line: LatLng[], ring: LatLng[]): boolean {
+  if (line.some((p) => pointInRing(p, ring))) return true;
+  const lats = ring.map((p) => p.lat), lngs = ring.map((p) => p.lng);
+  const box = { s: Math.min(...lats), n: Math.max(...lats), w: Math.min(...lngs), e: Math.max(...lngs) };
+  for (let i = 1; i < line.length; i++) {
+    const a = line[i - 1], b = line[i];
+    if (Math.max(a.lat, b.lat) < box.s || Math.min(a.lat, b.lat) > box.n ||
+        Math.max(a.lng, b.lng) < box.w || Math.min(a.lng, b.lng) > box.e) continue;
+    for (let j = 1; j < ring.length; j++) {
+      if (segmentsCross(a, b, ring[j - 1], ring[j])) return true;
+    }
+  }
+  return false;
+}
+
 /** Approximate ring area in km² (shoelace on a local flat projection). */
 export function ringAreaKm2(ring: LatLng[]): number {
   const lat0 = rad(ring[0].lat);

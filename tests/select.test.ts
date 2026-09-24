@@ -4,10 +4,10 @@ import { pointInRing, ringAreaKm2, ringExtentKm } from "../src/geo";
 import type { Hotspot, LatLng } from "../src/types";
 
 const pin = (name: string, lat: number, lng: number, extra: Partial<Hotspot> = {}): Hotspot => ({
-  name, risk: 2, nightOnly: false, mode: "avoid", shape: { kind: "point", at: { lat, lng } }, ...extra,
+  name, risk: 2, nightOnly: false, shape: { kind: "point", at: { lat, lng } }, ...extra,
 });
 const square = (name: string, lat: number, lng: number, sizeDeg: number, extra: Partial<Hotspot> = {}): Hotspot => ({
-  name, risk: 1, nightOnly: false, mode: "prefer",
+  name, risk: 1, nightOnly: false,
   shape: {
     kind: "polygon",
     ring: [
@@ -63,12 +63,12 @@ describe("selectZonesForTrip", () => {
     expect(skipped.map((s) => s.reason)).toEqual(["too-large"]);
   });
 
-  it("fills the total area budget with avoid zones before prefer zones", () => {
-    // Two ~110 km² prefer squares beside the route: only one fits under 200 km².
-    const a = square("prefer-a", -25.86, 28.11, 0.1);
-    const b = square("prefer-b", -25.86, 28.22, 0.1, { risk: 3 });
+  it("fills the total area budget by risk, highest first", () => {
+    // Two ~110 km² risk-1/risk-3 squares beside the route: only one fits under 200 km².
+    const a = square("area-a", -25.86, 28.11, 0.1);
+    const b = square("area-b", -25.86, 28.22, 0.1, { risk: 3 });
     const { zones, skipped } = selectZonesForTrip([a, pin("hard", -25.755, 28.2), b], origin, dest, normal);
-    expect(names(zones)).toEqual(["hard", "prefer-b"]);
-    expect(skipped.map((s) => [s.hotspot.name, s.reason])).toEqual([["prefer-a", "over-total-area"]]);
+    expect(names(zones)).toEqual(["area-b", "hard"]);
+    expect(skipped.map((s) => [s.hotspot.name, s.reason])).toEqual([["area-a", "over-total-area"]]);
   });
 });
