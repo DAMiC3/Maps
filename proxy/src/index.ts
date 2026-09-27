@@ -11,7 +11,8 @@ export interface Env {
 
 const ORS = "https://api.heigit.org";
 const ROUTE_URL = `${ORS}/openrouteservice/v2/directions/driving-car/geojson`;
-const GEOCODE_URL = `${ORS}/pelias/v1/search`;
+// Autocomplete finds places like "Centurion Mall" that plain search misses.
+const GEOCODE_URL = `${ORS}/pelias/v1/autocomplete`;
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {

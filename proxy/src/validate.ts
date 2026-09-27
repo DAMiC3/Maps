@@ -71,11 +71,22 @@ export function checkRouteBody(body: unknown): Checked<Record<string, unknown>> 
   return { ok: true, value: out };
 }
 
-/** Build the geocoder query from the allowed params only; country fixed to ZA. */
+/**
+ * Build the geocoder query from the allowed params only. Country and a
+ * Pretoria-area rectangle are forced, so results elsewhere never appear.
+ */
 export function checkGeocodeParams(params: URLSearchParams): Checked<URLSearchParams> {
   const text = params.get("text")?.trim() ?? "";
   if (!text || text.length > LIMITS.maxTextLength) return { ok: false, error: "Invalid search text." };
-  const out = new URLSearchParams({ text, "boundary.country": "ZA", size: "5" });
+  const out = new URLSearchParams({
+    text,
+    "boundary.country": "ZA",
+    "boundary.rect.min_lat": String(BBOX.south),
+    "boundary.rect.max_lat": String(BBOX.north),
+    "boundary.rect.min_lon": String(BBOX.west),
+    "boundary.rect.max_lon": String(BBOX.east),
+    size: "5",
+  });
   const lat = Number(params.get("focus.point.lat"));
   const lon = Number(params.get("focus.point.lon"));
   if (inBbox([lon, lat])) {

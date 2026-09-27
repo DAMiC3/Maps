@@ -48,8 +48,9 @@ export const config = {
     /** Published avoid_polygons limits (openrouteservice.org/restrictions). */
     maxAvoidAreaKm2: 200,
     maxAvoidExtentKm: 20,
-    /** Bias address search towards Pretoria. */
+    /** Bias address search towards Pretoria, and only show results inside this box. */
     focus: { lat: -25.7479, lng: 28.2293 },
+    searchBox: { south: -26.2, north: -25.2, west: 27.7, east: 28.8 },
     country: "ZA",
   },
 

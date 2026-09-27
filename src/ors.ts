@@ -15,7 +15,7 @@ export function direct(apiKey: string): Endpoint {
   const { routingBaseUrl, geocodeBaseUrl, profile } = config.ors;
   return {
     routeUrl: `${routingBaseUrl}/v2/directions/${profile}/geojson`,
-    geocodeUrl: `${geocodeBaseUrl}/search`,
+    geocodeUrl: `${geocodeBaseUrl}/autocomplete`,
     // Key in a header, not the URL, so it stays out of logs and history.
     headers: { Authorization: apiKey },
   };
@@ -27,12 +27,16 @@ async function errorMessage(res: Response, fallback: string): Promise<string> {
 }
 
 export async function geocode(text: string, ep: Endpoint): Promise<Place[]> {
-  const { focus, country } = config.ors;
+  const { focus, country, searchBox } = config.ors;
   const params = new URLSearchParams({
     text,
     "boundary.country": country,
     "focus.point.lat": String(focus.lat),
     "focus.point.lon": String(focus.lng),
+    "boundary.rect.min_lat": String(searchBox.south),
+    "boundary.rect.max_lat": String(searchBox.north),
+    "boundary.rect.min_lon": String(searchBox.west),
+    "boundary.rect.max_lon": String(searchBox.east),
     size: "5",
   });
   const res = await fetch(`${ep.geocodeUrl}?${params}`, { headers: ep.headers });

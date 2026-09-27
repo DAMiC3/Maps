@@ -35,6 +35,7 @@ describe("proxy: geocode params", () => {
       expect(r.value.get("boundary.country")).toBe("ZA");
       expect(r.value.get("focus.point.lat")).toBe("-25.75");
       expect(r.value.has("api_key")).toBe(false);
+      expect(r.value.get("boundary.rect.min_lat")).toBe("-26.2");
     }
   });
 
