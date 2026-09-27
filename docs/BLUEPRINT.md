@@ -14,7 +14,7 @@ https://claude.ai/artifact/WH37nB7EBhKBQ4Q3Z8BiN9).
 
 | Decision | Placeholder | Where |
 | --- | --- | --- |
-| Real hotspot list | Researched draft in `my-hotspots-draft.kml` (28 zones, local only, needs review) | your My Maps |
+| Real hotspot list | Built in: `src/data/hotspots.kml` (28 researched zones, public, needs review) | `src/data/hotspots.kml` |
 | KML rule format | `risk=3; night_only=yes; last=YYYY-MM-DD` | `src/kml.ts` |
 | Radius per risk | 300 / 600 / 1000 m | `src/config.ts` |
 | "After dark" hours | 18:00–06:00 | `src/config.ts` |
@@ -23,7 +23,7 @@ https://claude.ai/artifact/WH37nB7EBhKBQ4Q3Z8BiN9).
 | ORS base URL | Resolved: api.heigit.org/openrouteservice and /pelias/v1 (old host deprecated 2026-04-28) | `src/config.ts` |
 | Zones sent per trip | Only zones within 5 km of the normal route | `src/config.ts` |
 | Via-point rule | Mid-point of each stretch >120 m off the normal route, max 8 | `src/handoff.ts` |
-| API key visible in static page | Accepted for personal use; entered in Settings | `src/storage.ts` |
+| API key | Held as a secret by the Cloudflare proxy; never in the app | `proxy/` |
 | Done criteria | 4 landmark test trips pass live (below); add your own real trips | `tests/live-trips.test.ts` |
 
 ## How a route is chosen (decided 2026-09-24)

@@ -35,7 +35,7 @@ export const config = {
    * SafeRoute proxy (Cloudflare Worker in proxy/) that holds the ORS key.
    * Override with VITE_PROXY_URL for local testing against `wrangler dev`.
    */
-  proxyUrl: import.meta.env.VITE_PROXY_URL || "https://saferoute-proxy.REPLACE_ME.workers.dev",
+  proxyUrl: import.meta.env.VITE_PROXY_URL || "https://saferoute-proxy.bernardmanne3.workers.dev",
 
   ors: {
     // api.openrouteservice.org was deprecated on 2026-04-28 (reduced quota).
