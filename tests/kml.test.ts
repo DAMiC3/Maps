@@ -7,7 +7,7 @@ const kml = `<?xml version="1.0"?>
     <description><![CDATA[risk=3<br>night_only=yes<br>last=2026-09-01]]></description>
     <Point><coordinates>28.30,-25.79,0</coordinates></Point></Placemark>
   <Placemark><name>Suburb B</name>
-    <description>risk=1</description>
+    <description>risk=1; radius=150</description>
     <Polygon><outerBoundaryIs><LinearRing><coordinates>
       28.1,-25.7,0 28.2,-25.7,0 28.2,-25.8,0 28.1,-25.7,0
     </coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark>
@@ -49,5 +49,15 @@ describe("built-in hotspots", () => {
     const { readFileSync } = await import("fs");
     const hs = parseKml(readFileSync("src/data/hotspots.kml", "utf8"));
     expect(hs.length).toBeGreaterThan(20);
+  });
+});
+
+describe("radius rule", () => {
+  it("reads radius=150 and ignores silly values", () => {
+    const one = (d: string) =>
+      parseKml(`<kml><Placemark><description>${d}</description><Point><coordinates>28,-25</coordinates></Point></Placemark></kml>`)[0];
+    expect(one("radius=150").radiusMeters).toBe(150);
+    expect(one("radius=5").radiusMeters).toBeUndefined();
+    expect(one("risk=3").radiusMeters).toBeUndefined();
   });
 });

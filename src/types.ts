@@ -8,6 +8,8 @@ export type Hotspot = {
   nightOnly: boolean;
   /** Optional ISO date of the most recent report, shown in the UI. */
   lastReport?: string;
+  /** Circle radius in metres for a pin; overrides the per-risk default. */
+  radiusMeters?: number;
   /** A pin (turned into a circle) or an explicit polygon ring from My Maps. */
   shape: { kind: "point"; at: LatLng } | { kind: "polygon"; ring: LatLng[] };
 };

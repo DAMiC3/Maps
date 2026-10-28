@@ -18,7 +18,7 @@ export function activeHotspots(all: Hotspot[], now: Date): Hotspot[] {
 export function hotspotRing(h: Hotspot): LatLng[] {
   return h.shape.kind === "polygon"
     ? h.shape.ring
-    : circleRing(h.shape.at, config.radiusByRisk[h.risk], config.circleSegments);
+    : circleRing(h.shape.at, h.radiusMeters ?? config.radiusByRisk[h.risk], config.circleSegments);
 }
 
 export type SkipReason = "too-large" | "contains-endpoint" | "over-total-area";

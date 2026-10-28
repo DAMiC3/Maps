@@ -5,7 +5,7 @@ import type { Hotspot, LatLng } from "./types";
  * Parse a Google My Maps KML export into hotspots.
  *
  * Rules live in each pin's description as `key=value` pairs separated by `;`
- * or new lines, e.g. `risk=3; night_only=yes; last=2026-09-01`.
+ * or new lines, e.g. `risk=3; night_only=yes; last=2026-09-01; radius=150`.
  * Missing keys fall back to risk=2, night_only=no. Other keys are ignored.
  */
 export function parseKml(text: string): Hotspot[] {
@@ -22,6 +22,7 @@ export function parseKml(text: string): Hotspot[] {
       risk: toRisk(rules.risk),
       nightOnly: isYes(rules.night_only),
       lastReport: rules.last,
+      radiusMeters: toRadius(rules.radius),
     };
 
     const polygon = pm.getElementsByTagName("Polygon")[0];
@@ -63,6 +64,12 @@ function parseCoords(text: string): LatLng[] {
     .map((t) => t.split(",").map(Number))
     .filter(([lng, lat]) => Number.isFinite(lat) && Number.isFinite(lng))
     .map(([lng, lat]) => ({ lat, lng }));
+}
+
+/** Optional `radius=150` (metres). Ignored unless a sensible number. */
+function toRadius(v: string | undefined): number | undefined {
+  const n = Number(v);
+  return Number.isFinite(n) && n >= 50 && n <= 5000 ? n : undefined;
 }
 
 function toRisk(v: string | undefined): Risk {
