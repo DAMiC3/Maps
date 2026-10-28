@@ -26,7 +26,10 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 const zoneLayer = L.layerGroup().addTo(map);
 const routeLayer = L.layerGroup().addTo(map);
 
-/** Draw all zones: active ones filled by risk, ones the route passes outlined in amber. */
+/** Zone colours by risk: yellow, orange, red. */
+const RISK_COLORS = { 1: "#f2b705", 2: "#f07b16", 3: "#d62828" } as const;
+
+/** Draw all zones: active ones filled by risk colour, ones the route passes outlined in purple. */
 function drawZones(active: Hotspot[], passed: Hotspot[] = []) {
   zoneLayer.clearLayers();
   const activeSet = new Set(active);
@@ -34,11 +37,14 @@ function drawZones(active: Hotspot[], passed: Hotspot[] = []) {
   for (const h of hotspots) {
     const on = activeSet.has(h);
     const hit = passedSet.has(h);
+    const color = RISK_COLORS[h.risk];
     L.polygon(hotspotRing(h).map((p) => [p.lat, p.lng] as [number, number]), {
-      color: hit ? "#d99a00" : "#be3a2a",
+      color: hit ? "#7a3cff" : color,
+      fillColor: color,
       weight: hit ? 3 : 1.5,
       dashArray: on ? undefined : "4 6",
-      fillOpacity: on ? 0.06 * h.risk : 0.03,
+      opacity: on ? 0.9 : 0.4,
+      fillOpacity: on ? 0.12 + 0.06 * h.risk : 0.04,
     })
       .bindTooltip(
         `${h.name} · risk ${h.risk}${h.nightOnly ? " · after dark" : ""}` +
@@ -52,17 +58,28 @@ function drawZones(active: Hotspot[], passed: Hotspot[] = []) {
 function drawRoutes(normal: Route, safe: Route) {
   routeLayer.clearLayers();
   const ll = (r: Route) => r.coords.map((p) => [p.lat, p.lng] as [number, number]);
-  L.polyline(ll(normal), { color: "#8a8f94", weight: 4, dashArray: "6 8" }).addTo(routeLayer);
-  const safeLine = L.polyline(ll(safe), { color: "#2e7a58", weight: 6 }).addTo(routeLayer);
+  L.polyline(ll(normal), { color: "#7d8a91", weight: 4, dashArray: "6 8", opacity: 0.8 }).addTo(routeLayer);
+  L.polyline(ll(safe), { color: "#ffffff", weight: 10, opacity: 0.9 }).addTo(routeLayer); // casing
+  const safeLine = L.polyline(ll(safe), { color: "#1f8a5b", weight: 6 }).addTo(routeLayer);
+  const ends = [safe.coords[0], safe.coords[safe.coords.length - 1]];
+  ends.forEach((p, i) =>
+    L.circleMarker([p.lat, p.lng], {
+      radius: 7, weight: 3, color: "#ffffff", fillOpacity: 1, fillColor: i ? "#d0402b" : "#1f8a5b",
+    }).addTo(routeLayer),
+  );
   map.fitBounds(safeLine.getBounds(), { padding: [24, 24] });
 }
 
 // ---- status ----
-function setStatus(msg: string, isError = false) {
+function setStatus(msg: string, isError = false, busy = false) {
   const el = $("status");
   el.textContent = msg;
   el.classList.toggle("error", isError);
+  el.classList.toggle("busy", busy);
 }
+
+const chip = (text: string, kind = "") =>
+  Object.assign(document.createElement("span"), { className: `chip ${kind}`.trim(), textContent: text });
 
 // ---- install as an app ----
 // Android/desktop Chrome fire beforeinstallprompt; iPhone Safari needs "Add to Home Screen".
@@ -185,28 +202,32 @@ const li = (text: string) => Object.assign(document.createElement("li"), { textC
 const mins = (r: Route) => Math.round(r.durationSeconds / 60);
 
 async function findSafeRoute(origin: LatLng, dest: LatLng, when: Date) {
-  setStatus("Finding routes…");
-  const { normal, chosen, options, skipped, via, googleUrl } =
+  setStatus("Comparing routes around hotspots…", false, true);
+  const { normal, chosen, options, skipped, googleUrl } =
     await planTrip(origin, dest, hotspots, when, (f, t, avoid) => route(f, t, avoid, endpoint));
   const r = chosen.route;
 
   drawZones(activeHotspots(hotspots, when), chosen.passes);
   drawRoutes(normal, r);
   const extra = Math.max(0, mins(r) - mins(normal));
-  $("summary").textContent =
-    `${(r.distanceMeters / 1000).toFixed(1)} km, about ${mins(r)} min` +
-    (extra ? ` (+${extra} min to avoid ${chosen.avoided.length} zone${chosen.avoided.length === 1 ? "" : "s"}).` : " (fastest route).") +
-    (via.length ? ` ${via.length} via-point${via.length === 1 ? "" : "s"}.` : "");
+  const avoided = chosen.avoided.length;
+  $("summary").replaceChildren(
+    chip(`${mins(r)} min`, "big"),
+    chip(`${(r.distanceMeters / 1000).toFixed(1)} km`),
+    extra ? chip(`+${extra} min detour`, "warn") : chip("Fastest route", "good"),
+    ...(avoided ? [chip(`✓ avoids ${avoided} zone${avoided === 1 ? "" : "s"}`, "good")] : []),
+    ...(chosen.passes.length ? [chip(`passes ${chosen.passes.length}`, "warn")] : []),
+  );
 
   // Zones the chosen route still passes, with the cheapest option that would avoid each.
   const passWarnings = chosen.passes.map((h) => {
     const around = options.find((o) => !o.passes.includes(h));
+    const others = around?.passes.length ?? 0;
     const why = around
-      ? `; the best route around it takes ${mins(around.route)} min` +
-        (around.passes.length ? ` and passes ${around.passes.length} other zone${around.passes.length === 1 ? "" : "s"}` : "") +
-        ", which is not worth it"
-      : "; no route around it was found";
-    return li(`Passes through ${h.name} (risk ${h.risk})${why}.`);
+      ? ` · way around: ${mins(around.route)} min` + (others ? `, ${others} other zone${others === 1 ? "" : "s"}` : "")
+      : " · no way around";
+    // Drop trailing "(area)", "(night)", "(1 of 2)" from names to keep the line short.
+    return li(`Through ${h.name.replace(/\s*\([^)]*\)$/, "")} · risk ${h.risk}${why}`);
   });
   $("warnings").replaceChildren(
     ...passWarnings,
