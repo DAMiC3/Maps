@@ -54,3 +54,31 @@ describe("planTrip weighs detour time against danger (worth: risk1 3, risk2 8, r
     expect(p.options[0].label).toBe("Avoid 2 zones (risk 2+)");
   });
 });
+
+describe("routePasses: groups and corridors", async () => {
+  const { routePasses } = await import("../src/plan");
+  const line = (pts: [number, number][]): Route => ({
+    coords: pts.map(([lat, lng]) => ({ lat, lng })), distanceMeters: 0, durationSeconds: 0,
+  });
+  const east = line([[-25.75, 28.1], [-25.75, 28.3]]);
+
+  it("counts two zones in one group once", () => {
+    const a = { ...zone("Ramp end A", 28.15, 3), group: "ix" };
+    const b = { ...zone("Ramp end B", 28.16, 3), group: "ix" };
+    expect(routePasses(east, [a, b]).map((h) => h.name)).toEqual(["Ramp end A"]);
+  });
+
+  it("a corridor counts when driven along, not when crossed", () => {
+    // 300 m-wide strip along lat -25.75 from lng 28.12 to 28.28 (~16 km).
+    const strip: Hotspot = {
+      name: "Strip", risk: 3, nightOnly: true, minInsideMeters: 500,
+      shape: { kind: "polygon", ring: [
+        { lat: -25.7487, lng: 28.12 }, { lat: -25.7487, lng: 28.28 },
+        { lat: -25.7513, lng: 28.28 }, { lat: -25.7513, lng: 28.12 }, { lat: -25.7487, lng: 28.12 },
+      ] },
+    };
+    const crossing = line([[-25.70, 28.2], [-25.80, 28.2]]);
+    expect(routePasses(east, [strip])).toHaveLength(1);
+    expect(routePasses(crossing, [strip])).toHaveLength(0);
+  });
+});

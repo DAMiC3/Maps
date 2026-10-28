@@ -64,6 +64,27 @@ function setStatus(msg: string, isError = false) {
   el.classList.toggle("error", isError);
 }
 
+// ---- install as an app ----
+// Android/desktop Chrome fire beforeinstallprompt; iPhone Safari needs "Add to Home Screen".
+type InstallPrompt = Event & { prompt(): Promise<void>; userChoice: Promise<unknown> };
+let installPrompt: InstallPrompt | null = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  installPrompt = e as InstallPrompt;
+  $("installBtn").hidden = false;
+});
+$("installBtn").onclick = async () => {
+  if (!installPrompt) return;
+  await installPrompt.prompt();
+  await installPrompt.userChoice;
+  installPrompt = null;
+  $("installBtn").hidden = true;
+};
+const installed =
+  matchMedia("(display-mode: standalone)").matches ||
+  (navigator as Navigator & { standalone?: boolean }).standalone === true;
+if (!installed && /iphone|ipad|ipod/i.test(navigator.userAgent)) $("iosHint").hidden = false;
+
 // ---- settings ----
 const settingsBtn = $<HTMLButtonElement>("settingsBtn");
 settingsBtn.onclick = () => {

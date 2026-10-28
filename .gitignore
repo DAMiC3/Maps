@@ -7,3 +7,4 @@ my-hotspots*.kml
 .DS_Store
 .dev.vars
 .wrangler/
+.cache/

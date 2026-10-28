@@ -96,6 +96,25 @@ export function ringExtentKm(ring: LatLng[]): number {
   return Math.max(w, h) / 1000;
 }
 
+/**
+ * Approximate metres of the polyline inside the ring. Long segments are split
+ * into ~50 m pieces and each piece counts if its midpoint is inside.
+ */
+export function lengthInsideRing(line: LatLng[], ring: LatLng[]): number {
+  let total = 0;
+  for (let i = 1; i < line.length; i++) {
+    const a = line[i - 1], b = line[i];
+    const len = distanceMeters(a, b);
+    const pieces = Math.max(1, Math.ceil(len / 50));
+    for (let k = 0; k < pieces; k++) {
+      const t = (k + 0.5) / pieces;
+      const mid = { lat: a.lat + (b.lat - a.lat) * t, lng: a.lng + (b.lng - a.lng) * t };
+      if (pointInRing(mid, ring)) total += len / pieces;
+    }
+  }
+  return total;
+}
+
 export function distanceToPolyline(p: LatLng, line: LatLng[]): number {
   if (line.length === 1) return distanceMeters(p, line[0]);
   let best = Infinity;

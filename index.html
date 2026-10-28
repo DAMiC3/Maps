@@ -13,8 +13,14 @@
 <body>
   <header class="bar">
     <h1>SafeRoute</h1>
-    <button id="settingsBtn" class="ghost" aria-expanded="false" aria-controls="settings">Settings</button>
+    <div class="row">
+      <button id="installBtn" class="ghost" hidden>Install app</button>
+      <button id="settingsBtn" class="ghost" aria-expanded="false" aria-controls="settings">Settings</button>
+    </div>
   </header>
+  <p id="iosHint" class="panel small" hidden>
+    To install on iPhone: tap the <b>Share</b> button, then <b>Add to Home Screen</b>.
+  </p>
 
   <section id="settings" class="panel" hidden>
     <p id="hotspotInfo" class="muted"></p>

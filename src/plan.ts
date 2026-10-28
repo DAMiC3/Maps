@@ -1,5 +1,5 @@
 import { config, type Risk } from "./config";
-import { lineEntersRing } from "./geo";
+import { lengthInsideRing, lineEntersRing } from "./geo";
 import { googleMapsUrl, pickViaPoints } from "./handoff";
 import { activeHotspots, hotspotRing, selectZonesForTrip, type Skipped } from "./zones";
 import type { Hotspot, LatLng, Route } from "./types";
@@ -31,8 +31,29 @@ export type TripPlan = {
 
 const minutes = (r: Route) => r.durationSeconds / 60;
 
+const groupOf = (h: Hotspot) => h.group ?? h.name;
+
+/**
+ * Zones the route passes, one per group. Corridors and areas only count when
+ * the route drives `minInsideMeters` inside them (not just crossing a bridge).
+ */
 export function routePasses(r: Route, zones: Hotspot[]): Hotspot[] {
-  return zones.filter((h) => lineEntersRing(r.coords, hotspotRing(h)));
+  const seen = new Set<string>();
+  return zones.filter((h) => {
+    const ring = hotspotRing(h);
+    const hit = h.minInsideMeters
+      ? lengthInsideRing(r.coords, ring) >= h.minInsideMeters
+      : lineEntersRing(r.coords, ring);
+    if (!hit || seen.has(groupOf(h))) return false;
+    seen.add(groupOf(h));
+    return true;
+  });
+}
+
+/** Add the other members of each zone's group (avoid both ends of an interchange). */
+function withGroups(zones: Hotspot[], all: Hotspot[]): Hotspot[] {
+  const groups = new Set(zones.map(groupOf));
+  return all.filter((h) => groups.has(groupOf(h)));
 }
 
 export function routeCost(r: Route, passes: Hotspot[], worth = config.detourWorthMinutes): number {
@@ -90,13 +111,13 @@ export async function planTrip(
 
   // Avoid what the route would hit, adding zones the detour runs into (a few rounds).
   const avoidHits = async (eligible: Hotspot[], minRisk: Risk) => {
-    let avoid = routePasses(normal, eligible);
+    let avoid = withGroups(routePasses(normal, eligible), eligible);
     for (let round = 0; round < 3; round++) {
       const r = await tryAvoiding(avoid, minRisk);
       if (!r) return;
       const newHits = routePasses(r, eligible).filter((h) => !avoid.includes(h));
       if (!newHits.length) return;
-      avoid = [...avoid, ...newHits];
+      avoid = withGroups([...avoid, ...newHits], eligible);
     }
   };
 

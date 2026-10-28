@@ -10,6 +10,10 @@ export type Hotspot = {
   lastReport?: string;
   /** Circle radius in metres for a pin; overrides the per-risk default. */
   radiusMeters?: number;
+  /** Zones sharing a group (e.g. both ramp ends of one interchange) count once per route. */
+  group?: string;
+  /** A route only "passes" this zone if it drives at least this far inside (corridors, areas). */
+  minInsideMeters?: number;
   /** A pin (turned into a circle) or an explicit polygon ring from My Maps. */
   shape: { kind: "point"; at: LatLng } | { kind: "polygon"; ring: LatLng[] };
 };
