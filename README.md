@@ -45,17 +45,28 @@ that origin. No key is needed in the app.
 
 ## Updating the hotspots
 
-Edit the pins in Google My Maps, export KML, replace `src/data/hotspots.kml`,
-push. Each pin's description holds its rules:
+The researched list lives in `data/hotspots.source.json` (risk, evidence and
+sources per entry). Edit it, then rebuild and push:
 
 ```
-risk=3; night_only=yes; last=2026-09-01
+ORS_KEY=... node scripts/build-hotspots.mjs
 ```
 
-- `risk` 1–3 sets the zone circle size and how many detour minutes it is worth
-  (`radiusByRisk` and `detourWorthMinutes` in `src/config.ts`).
-- `night_only=yes` applies the zone only after dark (judged by the **Leave at** time).
-- Polygons drawn in My Maps are used as-is.
+The builder places each entry on real OpenStreetMap road geometry and writes
+`src/data/hotspots.kml` plus `docs/HOTSPOTS.md` (the evidence table):
+
+- `ramp`: small circles at the off-ramp ends on the cross street, kept clear of
+  the freeway itself so the freeway stays usable.
+- `intersection` / `point`: a circle on the junction.
+- `corridor`: a strip along a highway stretch (night only), counted when a route
+  drives 500 m inside it.
+- `area`: a circle around a high-carjacking police area, counted after 1 km inside.
+
+Each KML placemark's description holds its rules, for example
+`risk=3; night_only=yes; last=2026-09; radius=60; group=n1-garsfontein; min_inside=500`.
+`risk` 1–3 sets the default circle size and how many detour minutes it is worth
+(`radiusByRisk` and `detourWorthMinutes` in `src/config.ts`); a `group` counts once per route.
+A KML from Google My Maps with the same rules also works.
 
 ## Project layout
 

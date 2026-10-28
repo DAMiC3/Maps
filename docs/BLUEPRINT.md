@@ -14,8 +14,8 @@ https://claude.ai/artifact/WH37nB7EBhKBQ4Q3Z8BiN9).
 
 | Decision | Placeholder | Where |
 | --- | --- | --- |
-| Real hotspot list | Built in: `src/data/hotspots.kml` (28 researched zones, public, needs review) | `src/data/hotspots.kml` |
-| KML rule format | `risk=3; night_only=yes; last=YYYY-MM-DD` | `src/kml.ts` |
+| Real hotspot list | 36 researched hotspots (news, SAPS stats, security alerts; 2026-10-28), built by `scripts/build-hotspots.mjs` from `data/hotspots.source.json`; evidence in `docs/HOTSPOTS.md`. Needs a local review | `data/hotspots.source.json` |
+| KML rule format | `risk=3; night_only=yes; last=YYYY-MM; radius=60; group=id; min_inside=500` | `src/kml.ts` |
 | Radius per risk | 300 / 600 / 1000 m | `src/config.ts` |
 | "After dark" hours | 18:00–06:00 | `src/config.ts` |
 | Detour minutes worth per risk | 3 / 8 / 15 min (risk 1 / 2 / 3) | `src/config.ts` |
@@ -35,19 +35,17 @@ lowest score. If no detour is worth it, the route goes through the zone and
 the app says so. Suburb areas currently count the same as a single spot of
 the same risk.
 
-## Test trips (live run 2026-09-24 with the draft hotspot list)
-Run with `ORS_KEY=... npx vitest run tests/live-trips.test.ts` (uses `my-hotspots-draft.kml` if present).
+## Test trips (live run 2026-10-28 with the researched hotspot list)
+Run with `ORS_KEY=... npx vitest run tests/live-trips.test.ts`.
 
 | Trip | Normal (score) | Chosen (score) | What it decided |
 | --- | --- | --- | --- |
-| Centurion Mall to Menlyn Maine, 20:30 | 15 min (46) | 29 min (44) | Leaves the N1 to skip the Rigel and John Vorster off-ramps. Garsfontein can't be avoided: Menlyn Maine is inside its 1 km circle |
-| Union Buildings to Centurion Mall, 18:00 | 24 min (64) | 32 min (56) | Goes round Fountains Circle, Jean Ave and Eeufees; still crosses the CBD, Sunnyside and Pretoria West areas |
-| Union Buildings to Wonderboom Airport, 21:00 | 27 min (43) | 31 min (31) | Avoids every zone, including Wonderboompoort |
-| Hatfield Gautrain to Woodlands Boulevard, 19:30 | 23 min (78) | 36 min (52) | Avoids all N1 off-ramps; start and end zones can't be avoided |
+| Centurion Mall to Menlyn Maine, 20:30 | 15 min (33) | 16 min (22) | Stays on the N1 and only skips the Garsfontein Rd off-ramp (risk 3); still passes two risk-1 off-ramps |
+| Union Buildings to Centurion Mall, 18:00 | 24 min (48) | 30 min (33) | Goes round Fountains Circle and the Eeufees and Jean Ave interchanges; passes one risk-1 off-ramp |
+| Union Buildings to Wonderboom Airport, 21:00 | 27 min (27) | 27 min (27) | No researched hotspot on the way (the old Wonderboompoort pin had no recent evidence) |
+| Hatfield Gautrain to Woodlands Boulevard, 19:30 | 23 min (37) | 28 min (28) | Avoids every zone, including De Villebois Mareuil / Garsfontein and Garsfontein / Delfi |
 
-## Known design question: off-ramp pins also block the freeway
-An avoid zone blocks every road inside it. A pin on an interchange therefore
-also blocks the freeway passing through it, not just the off-ramp. Confirmed by
-the live test trips: N1 trips leave the freeway entirely and take 13-14 min longer. Possible fixes: move
-off-ramp pins onto the local road at the ramp end and use a smaller radius
-for them.
+## Off-ramp pins no longer block the freeway (resolved 2026-10-28)
+An avoid zone blocks every road inside it. Off-ramp hotspots are now small
+circles (25–60 m) on the cross street at each ramp end, kept at least 20 m clear
+of the freeway, so a route can stay on the freeway and only avoid the exit.

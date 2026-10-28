@@ -1,0 +1,693 @@
+{
+  "_about": "Curated SafeRoute hotspot list, researched 2026-10-28 from news (mostly Rekord), SAPS quarterly stats, security-firm alerts and community safety groups. Facts only; no businesses or people named. Build with: ORS_KEY=... node scripts/build-hotspots.mjs  (writes src/data/hotspots.kml and docs/HOTSPOTS.md).",
+  "_rubric": {
+    "1": "Only the long-standing TMPD/CPF hotspot list (republished nearly unchanged since ~2016) or a single older report.",
+    "2": "A dated incident since 2024, or a recent safety-group warning backed by a second source.",
+    "3": "Recent (2025-26) serious incidents (hijacking, attempted hijacking, shooting, armed robbery) reported by more than one source."
+  },
+  "_placement": {
+    "ramp": "Small circles at the street end of each off-ramp found in OpenStreetMap (both directions, one group), kept clear of the freeway itself.",
+    "intersection": "Circle at the OpenStreetMap junction of the two named roads.",
+    "point": "Circle at the given coordinate.",
+    "corridor": "Narrow strip along the road between two points (via the routing service); counts only when driven along for 500 m+.",
+    "area": "Police-precinct-sized circle; counts only when driven 1 km+ inside."
+  },
+  "hotspots": [
+    {
+      "id": "n1-garsfontein",
+      "name": "N1 Garsfontein Rd off-ramps",
+      "kind": "ramp",
+      "cross": "Garsfontein",
+      "near": [
+        -25.7848,
+        28.2703
+      ],
+      "risk": 3,
+      "last": "2026-09",
+      "evidence": "Attempted hijacking on the N1 northbound at the Garsfontein interchange ~20:30 (security alert, Sep 2026); smash-and-grab at the off-ramp lights, suspects waiting under the bridge (safety forum, 2024).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/09/10/warning-hijacking-warning-for-n1-and-n4-motorists/",
+        "https://www.mikebolhuis.co.za/post/project-pretoria-motorists-urged-to-remain-on-high-alert",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/07/30/beware-these-smash-and-grab-hotspots-in-pretoria/"
+      ]
+    },
+    {
+      "id": "n4-watermeyer",
+      "name": "N4 Watermeyer St interchange",
+      "kind": "ramp",
+      "cross": "Watermeyer",
+      "near": [
+        -25.7457,
+        28.2922
+      ],
+      "risk": 3,
+      "last": "2026-09",
+      "evidence": "Alleged attempted hijackings from ~19:00 (security alert, Sep 2026); motorists assaulted and robbed at the off-ramp after stopping (Jun 2024).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/09/10/warning-hijacking-warning-for-n1-and-n4-motorists/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/06/02/several-spiking-incidents-reported-across-pretoria/"
+      ]
+    },
+    {
+      "id": "n4-rossouw",
+      "name": "N4 Rossouw St interchange",
+      "kind": "ramp",
+      "cross": "Rossouw",
+      "near": [
+        -25.7531,
+        28.3046
+      ],
+      "risk": 2,
+      "last": "2026-09",
+      "evidence": "Suspicious activity and alleged attempted hijackings from ~19:00 (security alert, Sep 2026).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/09/10/warning-hijacking-warning-for-n1-and-n4-motorists/"
+      ]
+    },
+    {
+      "id": "n4-simon-vermooten",
+      "name": "Simon Vermooten Rd at the N4",
+      "kind": "ramp",
+      "cross": "Simon Vermooten",
+      "near": [
+        -25.7523,
+        28.3255
+      ],
+      "risk": 2,
+      "last": "2026-04",
+      "evidence": "Window smashed at the intersection near the N4 (Apr 2026); CPF and a local security forum say it is not isolated; on the TMPD list.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/04/10/smash-and-grab-hotspots-flagged-as-cpf-calls-for-stronger-community-vigilance/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/03/04/here-are-the-top-four-hijacking-hotspots-in-tshwane/"
+      ]
+    },
+    {
+      "id": "n14-eeufees",
+      "name": "N14 Eeufees Rd interchange",
+      "kind": "ramp",
+      "cross": "Eeufees|Roger Dyson",
+      "near": [
+        -25.782,
+        28.1907
+      ],
+      "risk": 2,
+      "last": "2024-07",
+      "evidence": "Safety forum hears of smash-and-grabs weekly (2024); spiking on the Eeufees on-ramp (Jun 2024); Eeufees/Roger Dyson lights on the TMPD list.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/07/30/beware-these-smash-and-grab-hotspots-in-pretoria/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/06/19/more-spiking-incidents-reported-at-these-hotspots/"
+      ]
+    },
+    {
+      "id": "n14-jean",
+      "name": "N14 Jean Ave off-ramps",
+      "kind": "ramp",
+      "cross": "Jean",
+      "near": [
+        -25.839,
+        28.1843
+      ],
+      "risk": 2,
+      "last": "2024-05",
+      "evidence": "On the TMPD list; two vehicles spiked near the off-ramp (May 2024).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/03/04/here-are-the-top-four-hijacking-hotspots-in-tshwane/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/06/02/several-spiking-incidents-reported-across-pretoria/"
+      ]
+    },
+    {
+      "id": "n1-atterbury",
+      "name": "N1 Atterbury Rd off-ramps",
+      "kind": "ramp",
+      "cross": "Atterbury",
+      "near": [
+        -25.7784,
+        28.2719
+      ],
+      "risk": 1,
+      "last": "2026-04",
+      "evidence": "Long-standing TMPD/CPF list only (republished 2024, 2026).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/04/10/smash-and-grab-hotspots-flagged-as-cpf-calls-for-stronger-community-vigilance/"
+      ]
+    },
+    {
+      "id": "n1-lynnwood",
+      "name": "N1 Lynnwood Rd off-ramps",
+      "kind": "ramp",
+      "cross": "Lynnwood",
+      "near": [
+        -25.7661,
+        28.2748
+      ],
+      "risk": 1,
+      "last": "2026-04",
+      "evidence": "Long-standing TMPD/CPF list only.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/04/10/smash-and-grab-hotspots-flagged-as-cpf-calls-for-stronger-community-vigilance/"
+      ]
+    },
+    {
+      "id": "n1-rigel",
+      "name": "N1 Rigel Ave off-ramps",
+      "kind": "ramp",
+      "cross": "Rigel",
+      "near": [
+        -25.8092,
+        28.2588
+      ],
+      "risk": 1,
+      "last": "2026-04",
+      "evidence": "Long-standing TMPD/CPF list only.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/04/10/smash-and-grab-hotspots-flagged-as-cpf-calls-for-stronger-community-vigilance/"
+      ]
+    },
+    {
+      "id": "n1-john-vorster",
+      "name": "N1 John Vorster Dr off-ramps",
+      "kind": "ramp",
+      "cross": "John Vorster",
+      "near": [
+        -25.8671,
+        28.1924
+      ],
+      "risk": 1,
+      "last": "2026-04",
+      "evidence": "Long-standing TMPD/CPF list only.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/04/10/smash-and-grab-hotspots-flagged-as-cpf-calls-for-stronger-community-vigilance/"
+      ]
+    },
+    {
+      "id": "devillebois-garsfontein",
+      "name": "De Villebois Mareuil Dr / Garsfontein Rd",
+      "kind": "intersection",
+      "a": "De Villebois Mareuil",
+      "b": "Garsfontein",
+      "near": [
+        -25.8235,
+        28.3098
+      ],
+      "risk": 2,
+      "last": "2026-04",
+      "evidence": "Smash-and-grabs with thieves escaping into roadside bush (CPF 2026, safety forum 2024); named an ambush/spiking hotspot by a neighbourhood watch.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/04/10/smash-and-grab-hotspots-flagged-as-cpf-calls-for-stronger-community-vigilance/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/07/30/beware-these-smash-and-grab-hotspots-in-pretoria/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/04/18/warning-spiking-hotspots-now-on-main-routes/"
+      ]
+    },
+    {
+      "id": "fountains-circle",
+      "name": "Fountains Circle",
+      "kind": "point",
+      "near": [
+        -25.7731,
+        28.1988
+      ],
+      "radius": 250,
+      "risk": 2,
+      "last": "2024-07",
+      "evidence": "Safety forum hears of smash-and-grabs weekly; vegetation gives cover (2024).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/07/30/beware-these-smash-and-grab-hotspots-in-pretoria/"
+      ]
+    },
+    {
+      "id": "mandela-justice-mahomed",
+      "name": "Nelson Mandela Dr / Justice Mahomed (Walker) St",
+      "kind": "intersection",
+      "a": "Nelson Mandela",
+      "b": "Justice Mahomed|Walker",
+      "near": [
+        -25.757,
+        28.205
+      ],
+      "risk": 2,
+      "last": "2026-06",
+      "evidence": "Sunnyside traffic lights on the TMPD list; Sunnyside flagged as a high-risk hijacking zone (2025) with a hijacking reported in Jun 2026.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/03/04/here-are-the-top-four-hijacking-hotspots-in-tshwane/",
+        "https://www.citizen.co.za/rekord/news-headlines/2025/05/30/hijacking-hotspots-in-pretoria-exposed-avoid-these-areas/",
+        "https://www.citizen.co.za/rekord/news-headlines/2026/06/09/police-response-leads-to-a-swift-hijacked-vehicle-recovery/"
+      ]
+    },
+    {
+      "id": "lynnwood-solomon-mahlangu",
+      "name": "Lynnwood Rd / Solomon Mahlangu Dr",
+      "kind": "intersection",
+      "a": "Lynnwood",
+      "b": "Solomon Mahlangu|Hans Strijdom",
+      "near": [
+        -25.7785,
+        28.3442
+      ],
+      "risk": 1,
+      "last": "2026-04",
+      "evidence": "TMPD/CPF list (republished 2024, 2026).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/03/04/here-are-the-top-four-hijacking-hotspots-in-tshwane/"
+      ]
+    },
+    {
+      "id": "lynnwood-university",
+      "name": "Lynnwood Rd / University Rd",
+      "kind": "intersection",
+      "a": "Lynnwood",
+      "b": "University",
+      "near": [
+        -25.756,
+        28.2252
+      ],
+      "risk": 1,
+      "last": "2026-04",
+      "evidence": "TMPD/CPF list.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/03/04/here-are-the-top-four-hijacking-hotspots-in-tshwane/"
+      ]
+    },
+    {
+      "id": "burnett-hilda",
+      "name": "Burnett St / Hilda St",
+      "kind": "intersection",
+      "a": "Burnett",
+      "b": "Hilda",
+      "near": [
+        -25.7506,
+        28.2352
+      ],
+      "risk": 1,
+      "last": "2026-04",
+      "evidence": "TMPD/CPF list.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/03/04/here-are-the-top-four-hijacking-hotspots-in-tshwane/"
+      ]
+    },
+    {
+      "id": "garsfontein-delfi",
+      "name": "Garsfontein Rd / Delfi Ave",
+      "kind": "intersection",
+      "a": "Garsfontein",
+      "b": "Delfi",
+      "near": [
+        -25.8077,
+        28.3002
+      ],
+      "risk": 1,
+      "last": "2026-04",
+      "evidence": "TMPD/CPF list.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/03/04/here-are-the-top-four-hijacking-hotspots-in-tshwane/"
+      ]
+    },
+    {
+      "id": "paul-kruger-beyers-naude",
+      "name": "Paul Kruger St / Beyers Naudé Dr",
+      "kind": "intersection",
+      "a": "Paul Kruger",
+      "b": "Beyers Naud",
+      "near": [
+        -25.69,
+        28.187
+      ],
+      "search_km": 3,
+      "risk": 1,
+      "last": "2026-04",
+      "evidence": "TMPD/CPF list.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/03/04/here-are-the-top-four-hijacking-hotspots-in-tshwane/"
+      ]
+    },
+    {
+      "id": "nossob-delmas",
+      "name": "Nossob St / Delmas Rd",
+      "kind": "point",
+      "near": [
+        -25.8214,
+        28.2606
+      ],
+      "risk": 1,
+      "last": "2024-07",
+      "evidence": "Smash-and-grabs near roadside bush (ward councillor, 2024).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/07/30/beware-these-smash-and-grab-hotspots-in-pretoria/"
+      ]
+    },
+    {
+      "id": "rubenstein-solomon-mahlangu",
+      "name": "Rubenstein Dr / Solomon Mahlangu Dr",
+      "kind": "intersection",
+      "a": "Rubenstein",
+      "b": "Solomon Mahlangu|Hans Strijdom",
+      "near": [
+        -25.83,
+        28.3
+      ],
+      "search_km": 4,
+      "risk": 1,
+      "last": "2024-07",
+      "evidence": "Smash-and-grab reported by the ward councillor (2024).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/07/30/beware-these-smash-and-grab-hotspots-in-pretoria/"
+      ]
+    },
+    {
+      "id": "atterbury-manitoba",
+      "name": "Atterbury Rd / Manitoba Dr",
+      "kind": "intersection",
+      "a": "Atterbury",
+      "b": "Manitoba",
+      "near": [
+        -25.785,
+        28.31
+      ],
+      "search_km": 4,
+      "risk": 1,
+      "last": "2024-10",
+      "evidence": "Armed robbery of a motorist at the traffic light (Oct 2024).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/10/08/faerie-glen-traffic-light-robbery-victim-speaks-out/"
+      ]
+    },
+    {
+      "id": "n1-carousel",
+      "name": "N1 Hammanskraal – Carousel – Maubane (night)",
+      "kind": "corridor",
+      "from": [
+        -25.3967,
+        28.2987
+      ],
+      "to": [
+        -25.2779,
+        28.2987
+      ],
+      "road": "N1",
+      "risk": 3,
+      "night_only": true,
+      "last": "2026-10",
+      "evidence": "Repeated spiking ambushes, robberies and fatal shootings of stopped motorists (Sep 2024, Jan 2025, Nov 2025, 2 Oct and 18 Oct 2026); police boards warn not to stop, risk mainly 20:00–04:00.",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/10/20/man-shot-dead-and-run-over-in-suspected-n1-spiking-trap-as-wife-flees-robbers/",
+        "https://www.citizen.co.za/rekord/news-headlines/2025/11/28/motorist-shot-and-killed-in-brutal-n1-spiking-ambush/",
+        "https://ewn.co.za/2025/01/18/2-people-shot-dead-1-injured-after-robbery-on-n1-highway-near-hammanskraal",
+        "https://www.sabcnews.com/sabcnews/vehicle-tyre-spiking-on-the-rise-on-tshwane-freeways/"
+      ]
+    },
+    {
+      "id": "n1-wallmannsthal",
+      "name": "N1 Sefako Makgatho Dr – Wallmannsthal (night)",
+      "kind": "corridor",
+      "from": [
+        -25.6801,
+        28.2782
+      ],
+      "to": [
+        -25.5744,
+        28.2824
+      ],
+      "road": "N1",
+      "risk": 3,
+      "night_only": true,
+      "last": "2026-08",
+      "evidence": "Spiking followed by assault and robbery, three injured (Aug 2026); police warning boards (2024); rocks thrown (May 2024).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/08/24/warning-motorists-left-injured-after-vehicle-spiked-on-n1/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/04/18/warning-spiking-hotspots-now-on-main-routes/",
+        "https://www.citizen.co.za/rekord/news-headlines/2026/03/23/here-are-the-spiking-hotspots-in-and-around-pretoria/"
+      ]
+    },
+    {
+      "id": "n4-donkerhoek",
+      "name": "N4 east Silverlakes – Donkerhoek – Mooiplaats (night)",
+      "kind": "corridor",
+      "from": [
+        -25.764,
+        28.385
+      ],
+      "to": [
+        -25.7974,
+        28.517
+      ],
+      "road": "N4",
+      "risk": 3,
+      "night_only": true,
+      "last": "2026-06",
+      "evidence": "Motorist stabbed to death after spiking (Mar 2024); armed robberies after spiking (Feb, Jun 2024); rocks on the road and an armed spiking suspect shot (2026).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/04/01/motorists-stabbed-to-death-in-n4-spiking-incident-2/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/02/09/two-suspected-n4-hijackers-arrested-after-another-tyre-spiking/",
+        "https://www.citizen.co.za/rekord/news-headlines/2026/04/10/armed-spiking-suspect-shot-and-injured-on-n4/",
+        "https://www.citizen.co.za/rekord/news-headlines/2026/06/11/beware-these-road-spiking-hotspots-safety-groups-remind-motorists-not-to-stop/"
+      ]
+    },
+    {
+      "id": "n4-libertus",
+      "name": "N4 Solomon Mahlangu – Simon Vermooten – Watermeyer (night)",
+      "kind": "corridor",
+      "from": [
+        -25.76,
+        28.36
+      ],
+      "to": [
+        -25.7488,
+        28.2949
+      ],
+      "road": "N4",
+      "risk": 2,
+      "night_only": true,
+      "last": "2025-03",
+      "evidence": "Motorists robbed after spiking near the Libertus bridge (Mar 2025); rocks on the road (Sep 2024, Feb 2025); named spiking stretch (2026).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2025/03/17/motorists-robbed-in-spiking-incident-on-n4/",
+        "https://citizen.co.za/rekord/?p=507589",
+        "https://www.citizen.co.za/rekord/news-headlines/2026/03/23/here-are-the-spiking-hotspots-in-and-around-pretoria/"
+      ]
+    },
+    {
+      "id": "r80-south",
+      "name": "R80 Mabopane Hwy: Eskia Mphahlele Dr – Rosslyn (night)",
+      "kind": "corridor",
+      "group": "r80",
+      "from": [
+        -25.705,
+        28.15
+      ],
+      "to": [
+        -25.656,
+        28.114
+      ],
+      "road": "R80",
+      "risk": 3,
+      "night_only": true,
+      "last": "2026-06",
+      "evidence": "Motorists shot after spiking (Apr 2024); taxi robbed and two shot near the Rosslyn off-ramp (Mar 2024); ambulance spiked at Wonderpark (May 2025); objects used to block the road at the R566 Rosslyn exit; repeatedly named spiking stretch (2024–2026).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/04/25/motorists-shot-in-r80-highway-spiking-incident/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/03/28/two-shot-during-a-taxi-robbery-on-the-r80-highway/",
+        "https://www.citizen.co.za/rekord/news-headlines/2025/05/08/ambulance-targeted-in-spiking-trap-on-r80/",
+        "https://www.citizen.co.za/rekord/news-headlines/2026/06/11/beware-these-road-spiking-hotspots-safety-groups-remind-motorists-not-to-stop/"
+      ]
+    },
+    {
+      "id": "r80-north",
+      "name": "R80 Mabopane Hwy: Rosslyn – Soshanguve (night)",
+      "kind": "corridor",
+      "group": "r80",
+      "from": [
+        -25.656,
+        28.114
+      ],
+      "to": [
+        -25.53,
+        28.08
+      ],
+      "road": "R80",
+      "risk": 3,
+      "night_only": true,
+      "last": "2026-06",
+      "evidence": "Rock thrown onto a police vehicle at the Soshanguve Block XX bridge (May 2024); TMPD-named spiking stretch to Ruth First Rd (2024); safety groups (2026).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/05/11/another-police-vehicle-targeted-by-highway-spiking-gang/",
+        "https://www.sabcnews.com/sabcnews/vehicle-tyre-spiking-on-the-rise-on-tshwane-freeways/",
+        "https://www.citizen.co.za/rekord/news-headlines/2026/06/11/beware-these-road-spiking-hotspots-safety-groups-remind-motorists-not-to-stop/"
+      ]
+    },
+    {
+      "id": "n4-platinum",
+      "name": "N4 north bypass Rosslyn – Onderstepoort (night)",
+      "kind": "corridor",
+      "from": [
+        -25.66,
+        28.114
+      ],
+      "to": [
+        -25.6384,
+        28.2038
+      ],
+      "road": "N4",
+      "risk": 2,
+      "night_only": true,
+      "last": "2026-09",
+      "evidence": "Spiking between Rosslyn and Lavender Rd, near the R80 off-ramp and near Onderstepoort (May–Jun 2024); motorist dragged into bushes after an N4 spiking (Sep 2026, section not named).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/06/19/more-spiking-incidents-reported-at-these-hotspots/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/06/02/several-spiking-incidents-reported-across-pretoria/",
+        "https://www.citizen.co.za/rekord/news-headlines/2026/09/03/watch-drone-finds-motorist-dragged-into-bushes-after-n4-spiking/"
+      ]
+    },
+    {
+      "id": "n14-centurion-west",
+      "name": "N14 Jean Ave – R114 – R55 (night)",
+      "kind": "corridor",
+      "from": [
+        -25.8375,
+        28.1834
+      ],
+      "to": [
+        -25.8914,
+        28.1145
+      ],
+      "road": "N14",
+      "risk": 2,
+      "night_only": true,
+      "last": "2025-08",
+      "evidence": "Couple robbed at gunpoint and man shot dead near the R114 ramp (May 2024); two cars spiked before the R55 (Aug 2025).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2024/06/02/several-spiking-incidents-reported-across-pretoria/",
+        "https://www.citizen.co.za/rekord/news-headlines/2025/08/12/two-cars-hit-spikes-on-n14-in-sudden-resurgence-of-road-attacks/"
+      ]
+    },
+    {
+      "id": "r21-flying-saucer",
+      "name": "R21 at the N1 Flying Saucer interchange (night)",
+      "kind": "corridor",
+      "from": "Flying Saucer interchange",
+      "to": "R21 Irene",
+      "road": "R21",
+      "risk": 2,
+      "night_only": true,
+      "last": "2026-03",
+      "evidence": "Multiple vehicles spiked just after the interchange (Mar 2026); spiking before the N1 interchange (May 2024).",
+      "sources": [
+        "https://www.citizen.co.za/rekord/news-headlines/2026/03/23/here-are-the-spiking-hotspots-in-and-around-pretoria/",
+        "https://www.citizen.co.za/rekord/news-headlines/2024/05/23/another-two-spiking-incidents-on-wednesday-evening/"
+      ]
+    },
+    {
+      "id": "area-mamelodi-east",
+      "name": "Mamelodi East (police area)",
+      "kind": "area",
+      "center": [
+        -25.715,
+        28.405
+      ],
+      "radius_km": 3.5,
+      "risk": 2,
+      "last": "2026-06",
+      "evidence": "SAPS carjackings: 56, 50, 82, 40, 52 in the five quarters to Jun 2026 (Tshwane's highest; #1 in South Africa Oct–Dec 2025).",
+      "sources": [
+        "https://www.agrisa.org.za/wp-content/uploads/2026/09/saps-crime-stats-2026-2027-1st-quarter.pdf",
+        "https://www.saps.gov.za/services/downloads/2025/2025-2026_-_3rd_Quarter_WEB.pdf"
+      ]
+    },
+    {
+      "id": "area-pretoria-west",
+      "name": "Pretoria West (police area)",
+      "kind": "area",
+      "center": [
+        -25.74814,
+        28.15827
+      ],
+      "radius_km": 3.5,
+      "risk": 2,
+      "last": "2026-09",
+      "evidence": "SAPS carjackings: 43, 57, 61, 35, 40 in the five quarters to Jun 2026; truck hijacking at Maltzan/Soutter St (Sep 2026).",
+      "sources": [
+        "https://www.agrisa.org.za/wp-content/uploads/2026/09/saps-crime-stats-2026-2027-1st-quarter.pdf",
+        "https://www.citizen.co.za/rekord/news-headlines/2026/09/30/pretoria-west-police-hunt-four-suspects-after-rtt-logistics-truck-hijacked/"
+      ]
+    },
+    {
+      "id": "area-akasia",
+      "name": "Akasia (police area)",
+      "kind": "area",
+      "center": [
+        -25.66,
+        28.105
+      ],
+      "radius_km": 3.5,
+      "risk": 2,
+      "last": "2026-03",
+      "evidence": "SAPS carjackings: 38, 50, 48, 34 in the four quarters to Mar 2026; most truck hijackings in Tshwane (Q1 2026/27).",
+      "sources": [
+        "https://www.saps.gov.za/services/downloads/2025/2025-2026_-_4th_Quarter_WEB.pdf",
+        "https://www.agrisa.org.za/wp-content/uploads/2026/09/saps-crime-stats-2026-2027-1st-quarter.pdf"
+      ]
+    },
+    {
+      "id": "area-olievenhoutbosch",
+      "name": "Olievenhoutbosch (police area)",
+      "kind": "area",
+      "center": [
+        -25.903,
+        28.095
+      ],
+      "radius_km": 2.5,
+      "risk": 1,
+      "last": "2026-06",
+      "evidence": "SAPS carjackings: 52, 42, 32, 38 in quarters to Jun 2026 (falling).",
+      "sources": [
+        "https://www.agrisa.org.za/wp-content/uploads/2026/09/saps-crime-stats-2026-2027-1st-quarter.pdf"
+      ]
+    },
+    {
+      "id": "area-silverton",
+      "name": "Silverton (police area)",
+      "kind": "area",
+      "center": [
+        -25.73323,
+        28.29628
+      ],
+      "radius_km": 2.5,
+      "risk": 1,
+      "last": "2026-03",
+      "evidence": "SAPS carjackings: 45, 49, 31 in quarters to Mar 2026.",
+      "sources": [
+        "https://www.saps.gov.za/services/downloads/2025/2025-2026_-_4th_Quarter_WEB.pdf"
+      ]
+    },
+    {
+      "id": "area-loate",
+      "name": "Loate (police area)",
+      "kind": "area",
+      "center": [
+        -25.49496,
+        28.07373
+      ],
+      "radius_km": 2.5,
+      "risk": 1,
+      "last": "2026-06",
+      "evidence": "SAPS carjackings: 33 in Apr–Jun 2026 (up from 23).",
+      "sources": [
+        "https://www.agrisa.org.za/wp-content/uploads/2026/09/saps-crime-stats-2026-2027-1st-quarter.pdf"
+      ]
+    },
+    {
+      "id": "area-rietgat",
+      "name": "Rietgat (police area)",
+      "kind": "area",
+      "center": [
+        -25.49774,
+        28.09017
+      ],
+      "radius_km": 2.5,
+      "risk": 1,
+      "last": "2026-06",
+      "evidence": "SAPS carjackings: 32, 31, 29 in quarters to Jun 2026.",
+      "sources": [
+        "https://www.agrisa.org.za/wp-content/uploads/2026/09/saps-crime-stats-2026-2027-1st-quarter.pdf"
+      ]
+    }
+  ]
+}
